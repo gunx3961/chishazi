@@ -14,3 +14,16 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# .NET build output
+**/bin/
+**/obj/
+
+# Local development configuration
+src/Chishazi/wwwroot/appsettings.Development.json
+
+# Local publish intermediates
+.artifacts/
+
+# GitHub Pages is built and deployed by GitHub Actions
+/docs/

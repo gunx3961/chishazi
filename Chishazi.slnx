@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Chishazi/Chishazi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Chishazi.Tests/Chishazi.Tests.csproj" />
+  </Folder>
+</Solution>

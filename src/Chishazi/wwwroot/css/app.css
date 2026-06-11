@@ -1,0 +1,444 @@
+:root {
+    color-scheme: light;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #1d291f;
+    background: #f5f0e6;
+    font-synthesis: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 320px;
+    background: #f5f0e6;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 92% 8%, rgba(238, 180, 91, 0.28), transparent 30rem),
+        linear-gradient(180deg, #f8f4eb 0%, #efe8db 100%);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    color: inherit;
+}
+
+.site-frame {
+    min-height: 100vh;
+}
+
+.site-nav,
+.site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+}
+
+.site-nav {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(29, 41, 31, 0.16);
+    color: #59645b;
+    font-size: 0.86rem;
+}
+
+.brand {
+    color: #1d291f;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+}
+
+.page-shell {
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 5.5rem 0 6rem;
+}
+
+.hero {
+    max-width: 850px;
+    margin-bottom: 4rem;
+}
+
+.eyebrow,
+.section-label,
+.category {
+    margin: 0 0 0.8rem;
+    color: #ac5b2a;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.hero h1 {
+    max-width: 800px;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(3.4rem, 8vw, 7.5rem);
+    font-weight: 500;
+    letter-spacing: -0.065em;
+    line-height: 0.92;
+}
+
+.hero h1:focus {
+    outline: none;
+}
+
+.hero-copy {
+    max-width: 650px;
+    margin: 2rem 0 0;
+    color: #59645b;
+    font-size: 1.12rem;
+    line-height: 1.7;
+}
+
+.control-panel,
+.notice-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2rem;
+    border: 1px solid rgba(29, 41, 31, 0.18);
+    background: rgba(255, 252, 245, 0.68);
+    box-shadow: 0 22px 60px rgba(67, 53, 32, 0.08);
+}
+
+.control-panel h2,
+.notice-panel h2,
+.results-heading h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 500;
+}
+
+.status-copy,
+.notice-panel p {
+    max-width: 650px;
+    margin: 0.8rem 0 0;
+    color: #667067;
+    line-height: 1.6;
+}
+
+code {
+    color: #7f4120;
+}
+
+.primary-button {
+    flex: 0 0 auto;
+    min-width: 220px;
+    padding: 1rem 1.35rem;
+    border: 1px solid #1d291f;
+    border-radius: 0;
+    color: #fffdf7;
+    background: #1d291f;
+    cursor: pointer;
+    font-weight: 750;
+    transition: transform 150ms ease, background 150ms ease;
+}
+
+.control-actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.75rem;
+}
+
+.secondary-button {
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(29, 41, 31, 0.35);
+    border-radius: 0;
+    color: #1d291f;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.secondary-button:hover:not(:disabled) {
+    background: rgba(29, 41, 31, 0.07);
+}
+
+.secondary-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.primary-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: #314536;
+}
+
+.primary-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.text-link {
+    flex: 0 0 auto;
+    color: #8f471f;
+    font-weight: 750;
+    text-underline-offset: 0.25rem;
+}
+
+.message {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid;
+    line-height: 1.5;
+}
+
+.error-message {
+    border-color: #a83d2f;
+    color: #71271e;
+    background: #f8ded8;
+}
+
+.warning-message {
+    display: block;
+    border-color: #c18428;
+    color: #67440e;
+    background: #faebc9;
+}
+
+.warning-message summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.warning-message ul {
+    margin-bottom: 0;
+}
+
+.results-section {
+    margin-top: 5rem;
+}
+
+.results-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.search-field {
+    display: grid;
+    gap: 0.55rem;
+    width: min(420px, 100%);
+    color: #59645b;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.search-field input {
+    width: 100%;
+    padding: 0.9rem 0;
+    border: 0;
+    border-bottom: 1px solid #647166;
+    border-radius: 0;
+    outline: none;
+    color: #1d291f;
+    background: transparent;
+    font-size: 1.05rem;
+}
+
+.search-field input:focus {
+    border-bottom-color: #ac5b2a;
+    box-shadow: 0 1px 0 #ac5b2a;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.food-card {
+    padding: 1.75rem;
+    border: 1px solid rgba(29, 41, 31, 0.15);
+    background: rgba(255, 253, 248, 0.8);
+}
+
+.food-card-title {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.food-card h3 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.category {
+    margin-bottom: 0.45rem;
+    color: #738076;
+    letter-spacing: 0.1em;
+}
+
+.serving {
+    color: #6c776e;
+    font-size: 0.78rem;
+    text-align: right;
+}
+
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 2rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(29, 41, 31, 0.12);
+}
+
+.nutrition-grid div {
+    min-width: 0;
+}
+
+.nutrition-grid dt {
+    color: #788279;
+    font-size: 0.72rem;
+}
+
+.nutrition-grid dd {
+    margin: 0.35rem 0 0;
+    font-size: 1.2rem;
+    font-weight: 750;
+}
+
+.nutrition-grid small {
+    margin-left: 0.18rem;
+    color: #7a847b;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.empty-state {
+    padding: 3rem;
+    border: 1px dashed rgba(29, 41, 31, 0.3);
+    color: #657067;
+    text-align: center;
+}
+
+.site-footer {
+    padding: 2rem 0 3rem;
+    border-top: 1px solid rgba(29, 41, 31, 0.16);
+    color: #657067;
+    font-size: 0.8rem;
+}
+
+#blazor-error-ui {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    display: none;
+    padding: 1rem;
+    color: white;
+    background: #7b2e25;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.loading-progress {
+    position: absolute;
+    display: block;
+    width: 7rem;
+    height: 7rem;
+    inset: 30vh 0 auto;
+    margin: auto;
+}
+
+.loading-progress circle {
+    fill: none;
+    stroke: #d7cebd;
+    stroke-width: 0.5rem;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.loading-progress circle:last-child {
+    stroke: #ac5b2a;
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+}
+
+.loading-progress-text {
+    position: absolute;
+    inset: calc(30vh + 2.85rem) 0 auto;
+    text-align: center;
+}
+
+.loading-progress-text::after {
+    content: var(--blazor-load-percentage-text, "Loading");
+}
+
+@media (max-width: 760px) {
+    .site-nav span,
+    .site-footer span {
+        display: none;
+    }
+
+    .page-shell {
+        padding-top: 3.5rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(3rem, 16vw, 5rem);
+    }
+
+    .control-panel,
+    .notice-panel,
+    .results-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .primary-button {
+        width: 100%;
+    }
+
+    .secondary-button {
+        width: 100%;
+    }
+
+    .control-actions {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nutrition-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
