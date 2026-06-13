@@ -103,8 +103,7 @@
   <data name="TagDisplayNameRequired" xml:space="preserve"><value>标签名不能空着。</value></data>
   <data name="TagDisplayNameUpdatedLocally" xml:space="preserve"><value>“{0}”改好了。</value></data>
   <data name="NoCachedData" xml:space="preserve"><value>还没载入菜单，连接一次就可以开始了。</value></data>
-  <data name="CachedSnapshotStatus" xml:space="preserve"><value>本地有 {0} 组数据，上次载入于 {1}。</value></data>
-  <data name="CurrentSnapshotStatus" xml:space="preserve"><value>菜单有 {0} 组数据，更新于 {1}。</value></data>
+  <data name="MenuLoadedStatus" xml:space="preserve"><value>上次载入于 {0}。</value></data>
   <data name="PendingLocalChangesStatus" xml:space="preserve"><value>还有 {0} 条改动没保存。菜单载入于 {1}。</value></data>
   <data name="PullBlockedByLocalChanges" xml:space="preserve"><value>还有改动没处理。先保存或放弃它们，再载入最新菜单。</value></data>
   <data name="CacheReadFailed" xml:space="preserve"><value>本地菜单没打开，不过还是可以重新载入。</value></data>

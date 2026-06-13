@@ -239,7 +239,6 @@
     private PreviewMode _previewMode;
     private string? _errorMessage;
     private bool _isLoading;
-    private bool _loadedFromCache;
     private bool _confirmDiscard;
 
     private string StatusMessage =>
@@ -251,8 +250,7 @@
                     PendingLocalChangeCount,
                     _snapshot.FetchedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"))
             : UiText.Get(
-                _loadedFromCache ? "CachedSnapshotStatus" : "CurrentSnapshotStatus",
-                _snapshot.Worksheets.Count,
+                "MenuLoadedStatus",
                 _snapshot.FetchedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"));
 
     private int PendingLocalChangeCount =>
@@ -286,7 +284,7 @@
                     await Store.SetBaselineAsync(_baseline);
                 }
 
-                ApplySnapshot(cached, loadedFromCache: true);
+                ApplySnapshot(cached);
             }
         }
         catch (JSException)
@@ -310,7 +308,7 @@
                 accessToken => SheetsClient.GetSpreadsheetAsync(
                     Options.SpreadsheetId,
                     accessToken));
-            ApplySnapshot(snapshot, loadedFromCache: false);
+            ApplySnapshot(snapshot);
             CancelPreview();
 
             try
@@ -429,7 +427,7 @@
                 accessToken => SheetsClient.GetSpreadsheetAsync(
                     Options.SpreadsheetId,
                     accessToken));
-            ApplySnapshot(refreshed, loadedFromCache: false);
+            ApplySnapshot(refreshed);
             await Store.SetSynchronizedAsync(refreshed);
             _baseline = refreshed;
             CancelPreview();
@@ -447,7 +445,6 @@
             _tags.Clear();
             _rowErrors.Clear();
             _errorMessage = null;
-            _loadedFromCache = false;
             _confirmDiscard = false;
             CancelPreview();
         }
@@ -480,7 +477,7 @@
             }
 
             _baseline = baseline;
-            ApplySnapshot(baseline, loadedFromCache: true);
+            ApplySnapshot(baseline);
             _confirmDiscard = false;
             CancelPreview();
         });
@@ -517,13 +514,12 @@
         }
     }
 
-    private void ApplySnapshot(SpreadsheetSnapshot snapshot, bool loadedFromCache)
+    private void ApplySnapshot(SpreadsheetSnapshot snapshot)
     {
         var result = RecipeParser.Parse(snapshot);
         var tagResult = TagParser.Parse(snapshot);
 
         _snapshot = snapshot;
-        _loadedFromCache = loadedFromCache;
         _recipes.Clear();
         _recipes.AddRange(result.Recipes);
         _tags.Clear();

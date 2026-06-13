@@ -174,3 +174,5 @@
 - Replaced the remaining English navigation brand and startup page title with
   the Chinese product name.
 - Removed the source repository link from the application footer.
+- Removed the raw worksheet count from the home status text and unified cached
+  and freshly loaded states under one last-loaded timestamp message.
