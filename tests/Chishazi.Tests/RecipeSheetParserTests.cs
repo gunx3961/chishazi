@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Chishazi.Localization;
 using Chishazi.Models;
 using Chishazi.Services;
 
@@ -56,7 +57,7 @@ public sealed class RecipeSheetParserTests
 
         var recipe = Assert.Single(result.Recipes);
         Assert.Equal("Valid recipe", recipe.Name);
-        Assert.Equal("Row 2: name is required.", Assert.Single(result.Errors));
+        Assert.Equal(UiText.Get("RowNameRequired", 2), Assert.Single(result.Errors));
     }
 
     [Fact]
@@ -74,7 +75,7 @@ public sealed class RecipeSheetParserTests
 
         Assert.Empty(result.Recipes);
         Assert.Equal(
-            "The header row is missing required column(s): name.",
+            UiText.Get("RequiredColumnsMissing", "name"),
             Assert.Single(result.Errors));
     }
 
@@ -93,7 +94,9 @@ public sealed class RecipeSheetParserTests
         var result = _parser.Parse(spreadsheet);
 
         Assert.Equal(2, result.Recipes.Count);
-        Assert.Equal("Duplicate recipe name: Apple.", Assert.Single(result.Errors));
+        Assert.Equal(
+            UiText.Get("DuplicateRecipeName", "Apple"),
+            Assert.Single(result.Errors));
     }
 
     [Fact]
@@ -111,7 +114,7 @@ public sealed class RecipeSheetParserTests
 
         Assert.Equal(["tag-dinner", "custom"], Assert.Single(result.Recipes).Tags);
         Assert.Equal(
-            "Row 2: 'custom' is not a defined Recipe tag.",
+            UiText.Get("UnknownRecipeTag", 2, "custom"),
             Assert.Single(result.Errors));
     }
 

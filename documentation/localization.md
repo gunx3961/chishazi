@@ -1,6 +1,6 @@
 # UI Text and Localization
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
 ## Source of Truth
 
@@ -20,15 +20,25 @@ Do not add user-visible sentences directly to Razor components, services, or
 JavaScript. Stable technical identifiers, resource keys, CSS names, worksheet
 column names, and the `CHISHAZI_*` JavaScript error codes are not UI text.
 
-## Editing English Text
+## Primary Language
 
-Edit the `<value>` associated with a resource key in `UiText.resx`. Keep the
-key unchanged unless all code references are updated at the same time.
+Chinese is the primary user interface language and is stored directly in the
+default `UiText.resx` resource. Chinese text is allowed only in user interface
+resources. Documentation, source comments, configuration notes, and agent
+commit messages remain English.
+
+Edit the `<value>` associated with a resource key in `UiText.resx`. Keep the key
+unchanged unless all code references are updated at the same time.
+
+UI copy should be conversational, playful, concise, and action-oriented.
+Prefer language about dishes, choices, saving, and syncing. Avoid exposing
+implementation terms such as snapshot, cache, worksheet, cell, OAuth, scope,
+or remote conflict unless no clearer recovery instruction is possible.
 
 Formatted resources use zero-based placeholders:
 
 ```text
-{0} recipes
+Formatted value with argument: {0}
 ```
 
 Upload preview, conflict, and route browser text follows the same resource
@@ -46,12 +56,13 @@ The arguments are supplied by `UiText.Get`.
 Create a culture-specific resource next to the default resource:
 
 ```text
-UiText.zh-CN.resx
+UiText.en-US.resx
 UiText.ja-JP.resx
 ```
 
 Copy every key from `UiText.resx` and translate only the values. The default
-resource remains the fallback when a culture-specific value is missing.
+Chinese resource remains the fallback when a culture-specific value is
+missing.
 
 Culture selection is not exposed in the current UI. A future language selector
 should set `CurrentCulture` and `CurrentUICulture`, persist the selected culture,

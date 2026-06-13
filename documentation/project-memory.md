@@ -150,7 +150,11 @@ It is not a backlog.
   overwrite an existing remote formula.
 - Upload writes strings as literal values and does not create or edit formulas.
 - The owner has configured the public OAuth Client ID and Spreadsheet ID.
-- The application uses English-only repository text and UI text.
+- Repository documentation, source comments, configuration notes, and agent
+  commit messages use English.
+- Chinese is the primary UI language and is allowed only in UI resources.
+- UI copy is conversational, playful, concise, and avoids implementation
+  terminology when an action-oriented explanation is available.
 - JavaScript returns stable error codes; C# maps them to localized UI text.
 - The home page has no promotional headline or introductory copy.
 - The synchronization module remains the last module on the home page so

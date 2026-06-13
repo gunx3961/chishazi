@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Chishazi.Localization;
 using Chishazi.Models;
 using Chishazi.Services;
 
@@ -51,7 +52,7 @@ public sealed class SpreadsheetDiffServiceTests
         Assert.False(result.CanUpload);
         Assert.Empty(result.Changes);
         Assert.Equal(
-            "Worksheet ID 1 was renamed from 'Recipe' to 'Renamed'.",
+            UiText.Get("WorksheetRenamedRemotely", 1, "Recipe", "Renamed"),
             Assert.Single(result.BlockingIssues));
     }
 
@@ -176,8 +177,11 @@ public sealed class SpreadsheetDiffServiceTests
 
         Assert.False(result.CanUpload);
         Assert.Equal(
-            "The upload target 'Recipe', row 2, field 'description' changed remotely " +
-            "after the last synchronization.",
+            UiText.Get(
+                "UploadTargetCellChanged",
+                "Recipe",
+                2,
+                "description"),
             Assert.Single(result.BlockingIssues));
     }
 
@@ -254,7 +258,7 @@ public sealed class SpreadsheetDiffServiceTests
 
         Assert.False(result.CanUpload);
         Assert.Contains(
-            "A remote worksheet named 'Recipe' now exists with a different identity.",
+            UiText.Get("WorksheetNameConflict", "Recipe"),
             Assert.Single(result.BlockingIssues));
     }
 
@@ -271,8 +275,7 @@ public sealed class SpreadsheetDiffServiceTests
 
         Assert.False(result.CanUpload);
         Assert.Equal(
-            "Upload would overwrite a formula in 'Recipe' at row 2, column 1. " +
-            "Edit that cell in Google Sheets or pull the current result instead.",
+            UiText.Get("FormulaOverwriteBlocked", "Recipe", 2, 1),
             Assert.Single(result.BlockingIssues));
     }
 

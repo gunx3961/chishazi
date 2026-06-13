@@ -4,12 +4,17 @@ These rules apply to the entire repository.
 
 ## Language
 
-- All repository documentation, source comments, user interface copy, commit
-  messages created by agents, and configuration notes must be written in
-  English.
+- Repository documentation, source comments, commit messages created by
+  agents, and configuration notes must be written in English.
+- User interface copy is the only repository content that may be written in
+  Chinese.
+- Chinese is the primary user interface language.
+- User interface copy should be conversational, playful, concise, and focused
+  on the user's next action. Avoid exposing technical terms and implementation
+  concepts unless the user must understand them to recover.
 - Conversations with the repository owner may use Chinese.
 - Before completing a change, search edited text files for accidental
-  non-English content.
+  non-English content outside user interface resources.
 
 ## Product Boundary
 
@@ -103,4 +108,5 @@ dotnet test Chishazi.slnx --no-build
 git diff --check
 ```
 
-Also verify that documentation and UI text remain English-only.
+Also verify that documentation remains English-only and user interface text
+follows the Chinese copy rules.

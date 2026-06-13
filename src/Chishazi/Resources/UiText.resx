@@ -4,142 +4,142 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
-  <data name="AppTitle" xml:space="preserve"><value>Chishazi Meal Decision</value></data>
-  <data name="PrimaryNavigationLabel" xml:space="preserve"><value>Primary navigation</value></data>
-  <data name="NavTagline" xml:space="preserve"><value>A personal way to decide what to eat.</value></data>
-  <data name="FooterPrivacy" xml:space="preserve"><value>Private sheet access is controlled by your Google account.</value></data>
-  <data name="SourceLink" xml:space="preserve"><value>Source</value></data>
-  <data name="SetupRequired" xml:space="preserve"><value>SETUP REQUIRED</value></data>
-  <data name="SetupTitle" xml:space="preserve"><value>Connect your private sheet</value></data>
-  <data name="SetupDescriptionBeforePath" xml:space="preserve"><value>Add your public OAuth Client ID and Spreadsheet ID to</value></data>
-  <data name="SetupDescriptionAfterPath" xml:space="preserve"><value>Do not add a client secret or any token.</value></data>
-  <data name="OpenSetupGuide" xml:space="preserve"><value>Open setup guide</value></data>
-  <data name="SpreadsheetDataControlsLabel" xml:space="preserve"><value>Spreadsheet data controls</value></data>
-  <data name="GoogleSheetsLabel" xml:space="preserve"><value>GOOGLE SHEETS</value></data>
-  <data name="RecipesLoaded" xml:space="preserve"><value>{0} recipes</value></data>
-  <data name="ClearCache" xml:space="preserve"><value>Clear cache</value></data>
-  <data name="Syncing" xml:space="preserve"><value>Syncing...</value></data>
-  <data name="AuthorizeAndPull" xml:space="preserve"><value>Authorize and pull</value></data>
-  <data name="PullSpreadsheet" xml:space="preserve"><value>Pull from Google Sheets</value></data>
-  <data name="PreviewUpload" xml:space="preserve"><value>Preview upload</value></data>
-  <data name="ReviewLocalChanges" xml:space="preserve"><value>Review local changes</value></data>
-  <data name="DiscardLocalChanges" xml:space="preserve"><value>Discard local changes</value></data>
-  <data name="LocalChangesPreviewLabel" xml:space="preserve"><value>LOCAL CHANGES</value></data>
-  <data name="UploadPreviewLabel" xml:space="preserve"><value>UPLOAD PREVIEW</value></data>
-  <data name="UploadChangesFound" xml:space="preserve"><value>{0} worksheet creation(s), {1} row change(s)</value></data>
-  <data name="WorksheetsToCreate" xml:space="preserve"><value>Worksheets to create</value></data>
-  <data name="NoUploadChanges" xml:space="preserve"><value>The local snapshot matches Google Sheets. Nothing will be uploaded.</value></data>
-  <data name="ConfirmUpload" xml:space="preserve"><value>Upload {0} worksheet creation(s), {1} row change(s)</value></data>
-  <data name="Uploading" xml:space="preserve"><value>Uploading...</value></data>
-  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="RowPosition" xml:space="preserve"><value>Row {0}</value></data>
-  <data name="ColumnNumber" xml:space="preserve"><value>Column {0}</value></data>
-  <data name="ValueTransition" xml:space="preserve"><value>{0} -&gt; {1}</value></data>
-  <data name="EmptyValue" xml:space="preserve"><value>(empty)</value></data>
-  <data name="ChangeAdded" xml:space="preserve"><value>ADD</value></data>
-  <data name="ChangeModified" xml:space="preserve"><value>MODIFY</value></data>
-  <data name="ChangeCleared" xml:space="preserve"><value>CLEAR</value></data>
-  <data name="RemoteChangedSincePreview" xml:space="preserve"><value>Google Sheets changed after the preview. Review a new upload preview before trying again.</value></data>
-  <data name="UploadTargetWorksheetChanged" xml:space="preserve"><value>The upload target worksheet '{0}' changed after the last synchronization.</value></data>
-  <data name="UploadTargetCellChanged" xml:space="preserve"><value>The upload target '{0}', row {1}, field '{2}' changed remotely after the last synchronization.</value></data>
-  <data name="DiscardLocalChangesLabel" xml:space="preserve"><value>DISCARD CHANGES</value></data>
-  <data name="DiscardLocalChangesTitle" xml:space="preserve"><value>Discard all local changes?</value></data>
-  <data name="DiscardLocalChangesDescription" xml:space="preserve"><value>The local working copy will return to the last synchronized snapshot. Google Sheets will not be contacted or changed.</value></data>
-  <data name="ConfirmDiscardLocalChanges" xml:space="preserve"><value>Discard all local changes</value></data>
-  <data name="NoBaselineToRestore" xml:space="preserve"><value>No synchronized snapshot is available to restore.</value></data>
-  <data name="AttentionTitle" xml:space="preserve"><value>Something needs attention.</value></data>
-  <data name="RowValidationIssues" xml:space="preserve"><value>{0} row validation issue(s)</value></data>
-  <data name="RecipeListTitle" xml:space="preserve"><value>Recipes</value></data>
-  <data name="NoRecipesAvailable" xml:space="preserve"><value>No recipes are available.</value></data>
-  <data name="TagsLabel" xml:space="preserve"><value>Tags</value></data>
-  <data name="DataBrowserLabel" xml:space="preserve"><value>DATA BROWSER</value></data>
-  <data name="AllDataTitle" xml:space="preserve"><value>All data</value></data>
-  <data name="NoCachedDataForBrowser" xml:space="preserve"><value>No local data is available. Pull data from Google Sheets on the home page first.</value></data>
-  <data name="SearchAllData" xml:space="preserve"><value>Search all worksheet values</value></data>
-  <data name="SearchDataPlaceholder" xml:space="preserve"><value>Enter any value</value></data>
-  <data name="RowsFound" xml:space="preserve"><value>{0} row(s)</value></data>
-  <data name="NoDataMatches" xml:space="preserve"><value>No rows match the current query.</value></data>
-  <data name="SearchRecipes" xml:space="preserve"><value>Search recipes</value></data>
-  <data name="SearchRecipesPlaceholder" xml:space="preserve"><value>Search names, descriptions, or tags</value></data>
-  <data name="LocalChangesLabel" xml:space="preserve"><value>LOCAL CHANGES</value></data>
-  <data name="AddRecipesTitle" xml:space="preserve"><value>Add recipes</value></data>
-  <data name="AddAnotherRecipe" xml:space="preserve"><value>Add another recipe</value></data>
-  <data name="RecipeDraftNumber" xml:space="preserve"><value>Recipe {0}</value></data>
-  <data name="RecipeNameLabel" xml:space="preserve"><value>Name</value></data>
-  <data name="RecipeNamePlaceholder" xml:space="preserve"><value>Recipe name</value></data>
-  <data name="RecipeDescriptionLabel" xml:space="preserve"><value>Description</value></data>
-  <data name="RecipeDescriptionPlaceholder" xml:space="preserve"><value>Optional description</value></data>
-  <data name="RemoveRecipeDraft" xml:space="preserve"><value>Remove this recipe</value></data>
-  <data name="SavingLocalChanges" xml:space="preserve"><value>Saving...</value></data>
-  <data name="AddRecipesToLocalChanges" xml:space="preserve"><value>Add {0} recipe(s) to local changes</value></data>
-  <data name="RecipesAddedLocally" xml:space="preserve"><value>{0} recipe(s) were added locally. Return home to preview and upload all pending changes.</value></data>
-  <data name="LocalChangesSaveFailed" xml:space="preserve"><value>The recipes could not be added to the local snapshot.</value></data>
-  <data name="AllRecipeNamesRequired" xml:space="preserve"><value>Every recipe draft requires a name.</value></data>
-  <data name="RecipeNameAlreadyExists" xml:space="preserve"><value>A recipe named '{0}' already exists in the local snapshot or this batch.</value></data>
-  <data name="AvailableRecipesTitle" xml:space="preserve"><value>Available recipes</value></data>
-  <data name="EditRecipe" xml:space="preserve"><value>Edit</value></data>
-  <data name="SaveRecipe" xml:space="preserve"><value>Save</value></data>
-  <data name="RecipeNameRequired" xml:space="preserve"><value>A recipe name is required.</value></data>
-  <data name="RecipeUpdatedLocally" xml:space="preserve"><value>The recipe '{0}' was updated locally. Return home to preview and upload pending changes.</value></data>
-  <data name="LocalRecipeUpdateFailed" xml:space="preserve"><value>The recipe could not be updated in the local snapshot.</value></data>
-  <data name="ManageTags" xml:space="preserve"><value>Manage tags</value></data>
-  <data name="NoTags" xml:space="preserve"><value>No tags are available. Add a tag first.</value></data>
-  <data name="TagListTitle" xml:space="preserve"><value>Tags</value></data>
-  <data name="TagsLoaded" xml:space="preserve"><value>{0} tags</value></data>
-  <data name="ReturnToRecipes" xml:space="preserve"><value>Return to recipes</value></data>
-  <data name="AddTagsTitle" xml:space="preserve"><value>Add tags</value></data>
-  <data name="AddAnotherTag" xml:space="preserve"><value>Add another tag</value></data>
-  <data name="TagDraftNumber" xml:space="preserve"><value>Tag {0}</value></data>
-  <data name="TagDisplayNameLabel" xml:space="preserve"><value>Name</value></data>
-  <data name="TagDisplayNamePlaceholder" xml:space="preserve"><value>Tag name</value></data>
-  <data name="RemoveTagDraft" xml:space="preserve"><value>Remove this tag</value></data>
-  <data name="AddTagsToLocalChanges" xml:space="preserve"><value>Add {0} tag(s) to local changes</value></data>
-  <data name="TagsAddedLocally" xml:space="preserve"><value>{0} tag(s) were added locally. Return home to preview and upload all pending changes.</value></data>
-  <data name="LocalTagChangesSaveFailed" xml:space="preserve"><value>The tag changes could not be saved to the local snapshot.</value></data>
-  <data name="AllTagDisplayNamesRequired" xml:space="preserve"><value>Every tag requires a name.</value></data>
-  <data name="TagDisplayNameAlreadyExists" xml:space="preserve"><value>A tag named '{0}' already exists locally or in this batch.</value></data>
-  <data name="AvailableTagsTitle" xml:space="preserve"><value>Available tags</value></data>
-  <data name="SaveTagDisplayName" xml:space="preserve"><value>Save</value></data>
-  <data name="TagDisplayNameRequired" xml:space="preserve"><value>A tag name is required.</value></data>
-  <data name="TagDisplayNameUpdatedLocally" xml:space="preserve"><value>The tag '{0}' was updated locally.</value></data>
-  <data name="NoCachedData" xml:space="preserve"><value>No local spreadsheet data is available. Authorize once to create the cache.</value></data>
-  <data name="CachedSnapshotStatus" xml:space="preserve"><value>Cached snapshot of {0} worksheet(s), synced {1}.</value></data>
-  <data name="CurrentSnapshotStatus" xml:space="preserve"><value>Current snapshot of {0} worksheet(s), synced {1}.</value></data>
-  <data name="PendingLocalChangesStatus" xml:space="preserve"><value>{0} pending local change(s). The base snapshot was synced {1}.</value></data>
-  <data name="PullBlockedByLocalChanges" xml:space="preserve"><value>Pull is blocked because local changes are pending. Review and upload them, or discard the local changes before pulling.</value></data>
-  <data name="CacheReadFailed" xml:space="preserve"><value>The browser cache could not be read. You can still sync from Google Sheets.</value></data>
-  <data name="CacheWriteFailed" xml:space="preserve"><value>Fresh data was loaded, but the browser cache could not be updated.</value></data>
-  <data name="RequestCanceled" xml:space="preserve"><value>The request was canceled. Try again.</value></data>
-  <data name="UnexpectedError" xml:space="preserve"><value>An unexpected error occurred. Reload the page and try again.</value></data>
-  <data name="CacheClearFailed" xml:space="preserve"><value>The browser cache could not be cleared.</value></data>
-  <data name="GoogleIdentityUnavailable" xml:space="preserve"><value>Google Identity Services did not load. Check your connection and try again.</value></data>
-  <data name="GoogleAuthorizationCanceled" xml:space="preserve"><value>Google authorization was canceled.</value></data>
-  <data name="GoogleAuthorizationFailed" xml:space="preserve"><value>Google authorization failed. Try again.</value></data>
-  <data name="GoogleAuthorizationNoToken" xml:space="preserve"><value>Google authorization returned no access token.</value></data>
-  <data name="GoogleAuthorizationExpired" xml:space="preserve"><value>Google authorization expired or was rejected. Authorize again.</value></data>
-  <data name="GoogleSpreadsheetForbidden" xml:space="preserve"><value>This Google account cannot read the spreadsheet. Check the sheet sharing settings and OAuth scope.</value></data>
-  <data name="GoogleSpreadsheetNotFound" xml:space="preserve"><value>The spreadsheet was not found. Check the Spreadsheet ID and sharing settings.</value></data>
-  <data name="GoogleSpreadsheetBadRequest" xml:space="preserve"><value>Google rejected the spreadsheet request. Check the spreadsheet structure.</value></data>
-  <data name="GoogleSheetsRateLimited" xml:space="preserve"><value>The Google Sheets request limit was reached. Wait briefly and try again.</value></data>
-  <data name="GoogleSheetsUnexpectedError" xml:space="preserve"><value>Google Sheets returned an unexpected error ({0}). Try again.</value></data>
-  <data name="WorksheetMissing" xml:space="preserve"><value>The spreadsheet does not contain the '{0}' worksheet.</value></data>
-  <data name="WorksheetEmpty" xml:space="preserve"><value>The '{0}' worksheet returned no rows.</value></data>
-  <data name="RequiredColumnsMissing" xml:space="preserve"><value>The header row is missing required column(s): {0}.</value></data>
-  <data name="RowNameRequired" xml:space="preserve"><value>Row {0}: name is required.</value></data>
-  <data name="DuplicateRecipeName" xml:space="preserve"><value>Duplicate recipe name: {0}.</value></data>
-  <data name="UnknownRecipeTag" xml:space="preserve"><value>Row {0}: '{1}' is not a defined Recipe tag.</value></data>
-  <data name="TagRequiredValues" xml:space="preserve"><value>Row {0}: Tag id and displayName are required.</value></data>
-  <data name="DuplicateTagId" xml:space="preserve"><value>Duplicate Tag id: {0}.</value></data>
-  <data name="WorksheetMissingRemotely" xml:space="preserve"><value>Worksheet '{0}' does not exist remotely.</value></data>
-  <data name="WorksheetNameConflict" xml:space="preserve"><value>A remote worksheet named '{0}' now exists with a different identity. Pull the current spreadsheet before uploading.</value></data>
-  <data name="WorksheetRenamedRemotely" xml:space="preserve"><value>Worksheet ID {0} was renamed from '{1}' to '{2}'.</value></data>
-  <data name="WorksheetMissingLocally" xml:space="preserve"><value>Remote worksheet '{0}' is missing locally.</value></data>
-  <data name="FormulaOverwriteBlocked" xml:space="preserve"><value>Upload would overwrite a formula in '{0}' at row {1}, column {2}. Edit that cell in Google Sheets or pull the current result instead.</value></data>
-  <data name="NotFoundCode" xml:space="preserve"><value>404</value></data>
-  <data name="NotFoundTitle" xml:space="preserve"><value>Page not found</value></data>
-  <data name="NotFoundDescription" xml:space="preserve"><value>The requested page does not exist.</value></data>
-  <data name="ReturnHome" xml:space="preserve"><value>Return home</value></data>
-  <data name="UnhandledError" xml:space="preserve"><value>An unhandled error has occurred.</value></data>
-  <data name="Reload" xml:space="preserve"><value>Reload</value></data>
-  <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="AppTitle" xml:space="preserve"><value>吃啥子</value></data>
+  <data name="BrandName" xml:space="preserve"><value>吃啥子</value></data>
+  <data name="PrimaryNavigationLabel" xml:space="preserve"><value>主导航</value></data>
+  <data name="NavTagline" xml:space="preserve"><value>今天吃啥子？</value></data>
+  <data name="FooterPrivacy" xml:space="preserve"><value>你的菜单只会用你的谷歌账号打开。</value></data>
+  <data name="SetupRequired" xml:space="preserve"><value>先准备一下</value></data>
+  <data name="SetupTitle" xml:space="preserve"><value>连接你的菜单</value></data>
+  <data name="SetupDescriptionBeforePath" xml:space="preserve"><value>把网页连接编号和表格编号填进</value></data>
+  <data name="SetupDescriptionAfterPath" xml:space="preserve"><value>不要填写密码或登录凭证。</value></data>
+  <data name="OpenSetupGuide" xml:space="preserve"><value>看看怎么设置</value></data>
+  <data name="SpreadsheetDataControlsLabel" xml:space="preserve"><value>菜单同步</value></data>
+  <data name="GoogleSheetsLabel" xml:space="preserve"><value>我的菜单</value></data>
+  <data name="RecipesLoaded" xml:space="preserve"><value>{0} 道菜</value></data>
+  <data name="ClearCache" xml:space="preserve"><value>清空本地数据</value></data>
+  <data name="Syncing" xml:space="preserve"><value>正在同步...</value></data>
+  <data name="AuthorizeAndPull" xml:space="preserve"><value>连接并载入菜单</value></data>
+  <data name="PullSpreadsheet" xml:space="preserve"><value>载入最新菜单</value></data>
+  <data name="PreviewUpload" xml:space="preserve"><value>看看准备保存什么</value></data>
+  <data name="ReviewLocalChanges" xml:space="preserve"><value>看看还没保存的改动</value></data>
+  <data name="DiscardLocalChanges" xml:space="preserve"><value>放弃这些改动</value></data>
+  <data name="LocalChangesPreviewLabel" xml:space="preserve"><value>待保存</value></data>
+  <data name="UploadPreviewLabel" xml:space="preserve"><value>保存前确认</value></data>
+  <data name="UploadChangesFound" xml:space="preserve"><value>新增 {0} 组数据，改动 {1} 条</value></data>
+  <data name="WorksheetsToCreate" xml:space="preserve"><value>会新建这些分类</value></data>
+  <data name="NoUploadChanges" xml:space="preserve"><value>没有新改动，菜单已经是最新的。</value></data>
+  <data name="ConfirmUpload" xml:space="preserve"><value>保存 {0} 个新分类和 {1} 条改动</value></data>
+  <data name="Uploading" xml:space="preserve"><value>正在保存...</value></data>
+  <data name="Cancel" xml:space="preserve"><value>算了</value></data>
+  <data name="RowPosition" xml:space="preserve"><value>第 {0} 条</value></data>
+  <data name="ColumnNumber" xml:space="preserve"><value>第 {0} 项</value></data>
+  <data name="ValueTransition" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="EmptyValue" xml:space="preserve"><value>空</value></data>
+  <data name="ChangeAdded" xml:space="preserve"><value>新增</value></data>
+  <data name="ChangeModified" xml:space="preserve"><value>修改</value></data>
+  <data name="ChangeCleared" xml:space="preserve"><value>清空</value></data>
+  <data name="RemoteChangedSincePreview" xml:space="preserve"><value>菜单刚刚变过了。再看一遍准备保存的内容吧。</value></data>
+  <data name="UploadTargetWorksheetChanged" xml:space="preserve"><value>“{0}”已经变过了。先载入最新菜单再试。</value></data>
+  <data name="UploadTargetCellChanged" xml:space="preserve"><value>“{0}”第 {1} 条的“{2}”已经变过了。先载入最新菜单再决定保留哪一版。</value></data>
+  <data name="DiscardLocalChangesLabel" xml:space="preserve"><value>重新来过</value></data>
+  <data name="DiscardLocalChangesTitle" xml:space="preserve"><value>真的不要这些改动了？</value></data>
+  <data name="DiscardLocalChangesDescription" xml:space="preserve"><value>菜单会回到上次载入时的样子，已经保存到谷歌表格里的内容不会受影响。</value></data>
+  <data name="ConfirmDiscardLocalChanges" xml:space="preserve"><value>不要了，恢复原样</value></data>
+  <data name="NoBaselineToRestore" xml:space="preserve"><value>还没有可以恢复的版本。先载入一次菜单吧。</value></data>
+  <data name="AttentionTitle" xml:space="preserve"><value>这里卡了一下</value></data>
+  <data name="RowValidationIssues" xml:space="preserve"><value>有 {0} 条内容需要看看</value></data>
+  <data name="RecipeListTitle" xml:space="preserve"><value>菜谱</value></data>
+  <data name="NoRecipesAvailable" xml:space="preserve"><value>菜单还是空的，先加几道菜吧。</value></data>
+  <data name="TagsLabel" xml:space="preserve"><value>标签</value></data>
+  <data name="DataBrowserLabel" xml:space="preserve"><value>菜单仓库</value></data>
+  <data name="AllDataTitle" xml:space="preserve"><value>全部数据</value></data>
+  <data name="NoCachedDataForBrowser" xml:space="preserve"><value>这里还没有菜单。先回首页载入一次吧。</value></data>
+  <data name="SearchAllData" xml:space="preserve"><value>搜全部内容</value></data>
+  <data name="SearchDataPlaceholder" xml:space="preserve"><value>输入想找的内容</value></data>
+  <data name="RowsFound" xml:space="preserve"><value>找到 {0} 条</value></data>
+  <data name="NoDataMatches" xml:space="preserve"><value>没找到，再换个词试试。</value></data>
+  <data name="SearchRecipes" xml:space="preserve"><value>搜菜谱</value></data>
+  <data name="SearchRecipesPlaceholder" xml:space="preserve"><value>搜菜名、简介或标签</value></data>
+  <data name="LocalChangesLabel" xml:space="preserve"><value>先记在这里</value></data>
+  <data name="AddRecipesTitle" xml:space="preserve"><value>加点新菜</value></data>
+  <data name="AddAnotherRecipe" xml:space="preserve"><value>再来一道</value></data>
+  <data name="RecipeDraftNumber" xml:space="preserve"><value>第 {0} 道</value></data>
+  <data name="RecipeNameLabel" xml:space="preserve"><value>菜名</value></data>
+  <data name="RecipeNamePlaceholder" xml:space="preserve"><value>这道菜叫什么？</value></data>
+  <data name="RecipeDescriptionLabel" xml:space="preserve"><value>随手记</value></data>
+  <data name="RecipeDescriptionPlaceholder" xml:space="preserve"><value>想补充点什么都行</value></data>
+  <data name="RemoveRecipeDraft" xml:space="preserve"><value>这道先不加</value></data>
+  <data name="SavingLocalChanges" xml:space="preserve"><value>正在记下...</value></data>
+  <data name="AddRecipesToLocalChanges" xml:space="preserve"><value>先记下这 {0} 道菜</value></data>
+  <data name="RecipesAddedLocally" xml:space="preserve"><value>记下 {0} 道新菜了。回首页确认后就能保存。</value></data>
+  <data name="LocalChangesSaveFailed" xml:space="preserve"><value>这几道菜没记下来，再试一次吧。</value></data>
+  <data name="AllRecipeNamesRequired" xml:space="preserve"><value>每道菜都得有个名字。</value></data>
+  <data name="RecipeNameAlreadyExists" xml:space="preserve"><value>已经有一道“{0}”了，换个名字吧。</value></data>
+  <data name="AvailableRecipesTitle" xml:space="preserve"><value>我的菜谱</value></data>
+  <data name="EditRecipe" xml:space="preserve"><value>改一改</value></data>
+  <data name="SaveRecipe" xml:space="preserve"><value>记下修改</value></data>
+  <data name="RecipeNameRequired" xml:space="preserve"><value>菜名不能空着。</value></data>
+  <data name="RecipeUpdatedLocally" xml:space="preserve"><value>“{0}”改好了。回首页确认后就能保存。</value></data>
+  <data name="LocalRecipeUpdateFailed" xml:space="preserve"><value>这次没改成功，再试一次吧。</value></data>
+  <data name="ManageTags" xml:space="preserve"><value>整理标签</value></data>
+  <data name="NoTags" xml:space="preserve"><value>还没有标签，先去加一个吧。</value></data>
+  <data name="TagListTitle" xml:space="preserve"><value>标签</value></data>
+  <data name="TagsLoaded" xml:space="preserve"><value>{0} 个标签</value></data>
+  <data name="ReturnToRecipes" xml:space="preserve"><value>回到菜谱</value></data>
+  <data name="AddTagsTitle" xml:space="preserve"><value>加点标签</value></data>
+  <data name="AddAnotherTag" xml:space="preserve"><value>再来一个</value></data>
+  <data name="TagDraftNumber" xml:space="preserve"><value>标签 {0}</value></data>
+  <data name="TagDisplayNameLabel" xml:space="preserve"><value>标签名</value></data>
+  <data name="TagDisplayNamePlaceholder" xml:space="preserve"><value>比如：下饭、清淡、快手</value></data>
+  <data name="RemoveTagDraft" xml:space="preserve"><value>这个先不要</value></data>
+  <data name="AddTagsToLocalChanges" xml:space="preserve"><value>先记下这 {0} 个标签</value></data>
+  <data name="TagsAddedLocally" xml:space="preserve"><value>记下 {0} 个新标签了。回首页确认后就能保存。</value></data>
+  <data name="LocalTagChangesSaveFailed" xml:space="preserve"><value>标签没记下来，再试一次吧。</value></data>
+  <data name="AllTagDisplayNamesRequired" xml:space="preserve"><value>每个标签都得有个名字。</value></data>
+  <data name="TagDisplayNameAlreadyExists" xml:space="preserve"><value>“{0}”已经有了，换一个吧。</value></data>
+  <data name="AvailableTagsTitle" xml:space="preserve"><value>现有标签</value></data>
+  <data name="SaveTagDisplayName" xml:space="preserve"><value>记下修改</value></data>
+  <data name="TagDisplayNameRequired" xml:space="preserve"><value>标签名不能空着。</value></data>
+  <data name="TagDisplayNameUpdatedLocally" xml:space="preserve"><value>“{0}”改好了。</value></data>
+  <data name="NoCachedData" xml:space="preserve"><value>还没载入菜单，连接一次就可以开始了。</value></data>
+  <data name="CachedSnapshotStatus" xml:space="preserve"><value>本地有 {0} 组数据，上次载入于 {1}。</value></data>
+  <data name="CurrentSnapshotStatus" xml:space="preserve"><value>菜单有 {0} 组数据，更新于 {1}。</value></data>
+  <data name="PendingLocalChangesStatus" xml:space="preserve"><value>还有 {0} 条改动没保存。菜单载入于 {1}。</value></data>
+  <data name="PullBlockedByLocalChanges" xml:space="preserve"><value>还有改动没处理。先保存或放弃它们，再载入最新菜单。</value></data>
+  <data name="CacheReadFailed" xml:space="preserve"><value>本地菜单没打开，不过还是可以重新载入。</value></data>
+  <data name="CacheWriteFailed" xml:space="preserve"><value>菜单载入了，但没能留在本机。下次打开时需要再载入一次。</value></data>
+  <data name="RequestCanceled" xml:space="preserve"><value>刚才取消了，再试一次吧。</value></data>
+  <data name="UnexpectedError" xml:space="preserve"><value>刚才没成功，刷新页面再试试。</value></data>
+  <data name="CacheClearFailed" xml:space="preserve"><value>本地数据没清掉，再试一次吧。</value></data>
+  <data name="GoogleIdentityUnavailable" xml:space="preserve"><value>谷歌登录暂时没准备好。检查网络后再试一次。</value></data>
+  <data name="GoogleAuthorizationCanceled" xml:space="preserve"><value>登录取消了，需要时再连接吧。</value></data>
+  <data name="GoogleAuthorizationFailed" xml:space="preserve"><value>这次没连上谷歌账号，再试一次吧。</value></data>
+  <data name="GoogleAuthorizationNoToken" xml:space="preserve"><value>登录没有完成，再连接一次吧。</value></data>
+  <data name="GoogleAuthorizationExpired" xml:space="preserve"><value>登录状态过期了，请重新连接。</value></data>
+  <data name="GoogleSpreadsheetForbidden" xml:space="preserve"><value>这个账号打不开菜单。看看表格是不是已经分享给它。</value></data>
+  <data name="GoogleSpreadsheetNotFound" xml:space="preserve"><value>没找到这份菜单。检查表格编号和分享设置。</value></data>
+  <data name="GoogleSpreadsheetBadRequest" xml:space="preserve"><value>菜单的排布有点不对，检查一下表格标题和内容。</value></data>
+  <data name="GoogleSheetsRateLimited" xml:space="preserve"><value>操作有点快，歇一会儿再试。</value></data>
+  <data name="GoogleSheetsUnexpectedError" xml:space="preserve"><value>谷歌表格刚才没响应（{0}），稍后再试。</value></data>
+  <data name="WorksheetMissing" xml:space="preserve"><value>菜单里还没有“{0}”这组数据。</value></data>
+  <data name="WorksheetEmpty" xml:space="preserve"><value>“{0}”还是空的。</value></data>
+  <data name="RequiredColumnsMissing" xml:space="preserve"><value>这组数据少了必要项目：{0}。</value></data>
+  <data name="RowNameRequired" xml:space="preserve"><value>第 {0} 条还没有名字。</value></data>
+  <data name="DuplicateRecipeName" xml:space="preserve"><value>菜名重复了：{0}。</value></data>
+  <data name="UnknownRecipeTag" xml:space="preserve"><value>第 {0} 条用了找不到的标签“{1}”。</value></data>
+  <data name="TagRequiredValues" xml:space="preserve"><value>第 {0} 个标签不完整。</value></data>
+  <data name="DuplicateTagId" xml:space="preserve"><value>有两个标签撞号了：{0}。</value></data>
+  <data name="WorksheetMissingRemotely" xml:space="preserve"><value>谷歌表格里的“{0}”不见了。先载入最新菜单。</value></data>
+  <data name="WorksheetNameConflict" xml:space="preserve"><value>谷歌表格里已经有一个同名的“{0}”。先载入最新菜单。</value></data>
+  <data name="WorksheetRenamedRemotely" xml:space="preserve"><value>“{1}”已经改名为“{2}”。先载入最新菜单。</value></data>
+  <data name="WorksheetMissingLocally" xml:space="preserve"><value>谷歌表格里多了“{0}”。先载入最新菜单。</value></data>
+  <data name="FormulaOverwriteBlocked" xml:space="preserve"><value>“{0}”第 {1} 条的第 {2} 项由表格自动计算，不能直接覆盖。请先去谷歌表格处理。</value></data>
+  <data name="NotFoundCode" xml:space="preserve"><value>走错路了</value></data>
+  <data name="NotFoundTitle" xml:space="preserve"><value>这里什么都没有</value></data>
+  <data name="NotFoundDescription" xml:space="preserve"><value>这个页面可能搬家了，回首页继续选菜吧。</value></data>
+  <data name="ReturnHome" xml:space="preserve"><value>回首页</value></data>
+  <data name="UnhandledError" xml:space="preserve"><value>页面刚才卡住了。</value></data>
+  <data name="Reload" xml:space="preserve"><value>重新来一次</value></data>
+  <data name="Close" xml:space="preserve"><value>关掉</value></data>
 </root>

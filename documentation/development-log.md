@@ -163,3 +163,14 @@
   upload without a false conflict.
 - Changed spreadsheet string comparison to use decoded values, preventing
   equivalent Unicode JSON encodings from being reported as remote edits.
+- Changed the primary UI language to Chinese.
+- Rewrote the complete UI resource set with concise, conversational, playful
+  copy and replaced implementation terminology with action-oriented guidance.
+- Updated repository language rules and localization documentation so Chinese
+  is allowed only in user interface resources.
+- Replaced the mixed Latin serif and sans-serif typography with a system UI
+  font stack that provides consistent Chinese and English rendering across
+  macOS, Windows, Android, and Linux.
+- Replaced the remaining English navigation brand and startup page title with
+  the Chinese product name.
+- Removed the source repository link from the application footer.

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Chishazi.Localization;
 using Chishazi.Models;
 using Chishazi.Services;
 
@@ -57,9 +58,9 @@ public sealed class TagSheetParserTests
         Assert.Equal(2, result.Tags.Count);
         Assert.Equal(
             [
-                "Row 2: Tag id and displayName are required.",
-                "Row 3: Tag id and displayName are required.",
-                "Duplicate Tag id: tag-2."
+                UiText.Get("TagRequiredValues", 2),
+                UiText.Get("TagRequiredValues", 3),
+                UiText.Get("DuplicateTagId", "tag-2")
             ],
             result.Errors);
     }
