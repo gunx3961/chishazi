@@ -24,7 +24,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
     font: inherit;
 }
 
@@ -68,44 +69,15 @@ a {
 .page-shell {
     width: min(1180px, calc(100% - 3rem));
     margin: 0 auto;
-    padding: 5.5rem 0 6rem;
+    padding: 3rem 0 6rem;
 }
 
-.hero {
-    max-width: 850px;
-    margin-bottom: 4rem;
-}
-
-.eyebrow,
-.section-label,
-.category {
+.section-label {
     margin: 0 0 0.8rem;
     color: #ac5b2a;
     font-size: 0.74rem;
     font-weight: 800;
     letter-spacing: 0.16em;
-}
-
-.hero h1 {
-    max-width: 800px;
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(3.4rem, 8vw, 7.5rem);
-    font-weight: 500;
-    letter-spacing: -0.065em;
-    line-height: 0.92;
-}
-
-.hero h1:focus {
-    outline: none;
-}
-
-.hero-copy {
-    max-width: 650px;
-    margin: 2rem 0 0;
-    color: #59645b;
-    font-size: 1.12rem;
-    line-height: 1.7;
 }
 
 .control-panel,
@@ -120,13 +92,44 @@ a {
     box-shadow: 0 22px 60px rgba(67, 53, 32, 0.08);
 }
 
-.control-panel h2,
 .notice-panel h2,
 .results-heading h2 {
     margin: 0;
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(1.8rem, 3vw, 2.6rem);
     font-weight: 500;
+}
+
+.sync-panel {
+    margin-top: 4rem;
+}
+
+.data-total-link {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: #1d291f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: rgba(172, 91, 42, 0.45);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.16em;
+}
+
+.data-total-link:hover {
+    text-decoration-color: #ac5b2a;
+}
+
+.data-total-link:focus-visible {
+    outline: 2px solid #ac5b2a;
+    outline-offset: 0.35rem;
+}
+
+.data-type-list {
+    display: grid;
+    gap: 0.75rem;
 }
 
 .status-copy,
@@ -152,6 +155,25 @@ code {
     cursor: pointer;
     font-weight: 750;
     transition: transform 150ms ease, background 150ms ease;
+}
+
+.danger-button {
+    margin-top: 1.5rem;
+    padding: 1rem 1.35rem;
+    border: 1px solid #7d2b22;
+    color: #fff;
+    background: #7d2b22;
+    cursor: pointer;
+    font-weight: 750;
+}
+
+.danger-button:hover:not(:disabled) {
+    background: #9b382c;
+}
+
+.danger-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
 }
 
 .control-actions {
@@ -211,6 +233,12 @@ code {
     background: #f8ded8;
 }
 
+.success-message {
+    border-color: #43764d;
+    color: #234f2d;
+    background: #dff0e2;
+}
+
 .warning-message {
     display: block;
     border-color: #c18428;
@@ -228,7 +256,154 @@ code {
 }
 
 .results-section {
-    margin-top: 5rem;
+    margin-top: 2rem;
+}
+
+.entry-panel {
+    margin-bottom: 4rem;
+    padding: 2rem;
+    border: 1px solid rgba(29, 41, 31, 0.18);
+    background: rgba(255, 252, 245, 0.68);
+    box-shadow: 0 22px 60px rgba(67, 53, 32, 0.08);
+}
+
+.draft-list {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.draft-card {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 1.5rem;
+    border: 1px solid rgba(29, 41, 31, 0.16);
+    background: rgba(255, 253, 248, 0.8);
+}
+
+.draft-card > legend,
+.tag-selector > legend {
+    padding: 0 0.4rem;
+    font-weight: 750;
+}
+
+.form-field {
+    display: grid;
+    gap: 0.5rem;
+    color: #59645b;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(29, 41, 31, 0.25);
+    border-radius: 0;
+    color: #1d291f;
+    background: #fffdf8;
+}
+
+.form-field textarea {
+    min-height: 6rem;
+    resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    border-color: #ac5b2a;
+    outline: 1px solid #ac5b2a;
+}
+
+.tag-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid rgba(29, 41, 31, 0.14);
+}
+
+.tag-selector label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    background: rgba(238, 180, 91, 0.18);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.text-button {
+    justify-self: start;
+    padding: 0;
+    border: 0;
+    color: #8f471f;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+}
+
+.preview-panel {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(125, 43, 34, 0.25);
+    background: rgba(255, 249, 242, 0.78);
+}
+
+.preview-panel .results-heading {
+    margin-bottom: 1rem;
+}
+
+.route-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.route-actions {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.muted-copy {
+    color: #667067;
+    line-height: 1.5;
+}
+
+.tag-management-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.tag-management-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(29, 41, 31, 0.15);
+    background: rgba(255, 253, 248, 0.8);
+}
+
+.tag-management-details {
+    display: grid;
+    gap: 0.65rem;
+    width: min(32rem, 100%);
+}
+
+.route-heading h1 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-weight: 500;
 }
 
 .results-heading {
@@ -242,7 +417,8 @@ code {
 .search-field {
     display: grid;
     gap: 0.55rem;
-    width: min(420px, 100%);
+    width: min(520px, 100%);
+    margin-bottom: 2rem;
     color: #59645b;
     font-size: 0.78rem;
     font-weight: 700;
@@ -265,73 +441,142 @@ code {
     box-shadow: 0 1px 0 #ac5b2a;
 }
 
-.food-grid {
+.recipe-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
 }
 
-.food-card {
+.recipe-card {
     padding: 1.75rem;
     border: 1px solid rgba(29, 41, 31, 0.15);
     background: rgba(255, 253, 248, 0.8);
 }
 
-.food-card-title {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.food-card h3 {
+.recipe-card h2,
+.recipe-card h3 {
     margin: 0;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.8rem;
     font-weight: 500;
 }
 
-.category {
-    margin-bottom: 0.45rem;
-    color: #738076;
-    letter-spacing: 0.1em;
-}
-
-.serving {
-    color: #6c776e;
-    font-size: 0.78rem;
-    text-align: right;
-}
-
-.nutrition-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.recipe-card-heading,
+.recipe-card-actions {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     gap: 1rem;
-    margin: 2rem 0 0;
-    padding-top: 1.2rem;
-    border-top: 1px solid rgba(29, 41, 31, 0.12);
 }
 
-.nutrition-grid div {
+.recipe-edit-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.recipe-card-actions {
+    justify-content: flex-start;
+}
+
+.row-change-list {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.row-change-card {
+    padding: 0.7rem 0.85rem;
+    border: 1px solid rgba(29, 41, 31, 0.14);
+    background: rgba(255, 253, 248, 0.82);
+}
+
+.row-change-heading,
+.row-change-heading > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.65rem;
+}
+
+.row-change-heading > div span {
+    color: #667067;
+    font-size: 0.75rem;
+}
+
+.change-kind {
+    color: #9a4d25;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.row-change-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.85rem;
+    margin: 0.45rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.78rem;
+}
+
+.row-change-fields li {
+    display: flex;
+    gap: 0.35rem;
     min-width: 0;
 }
 
-.nutrition-grid dt {
-    color: #788279;
-    font-size: 0.72rem;
+.row-change-fields strong {
+    color: #59645b;
 }
 
-.nutrition-grid dd {
-    margin: 0.35rem 0 0;
-    font-size: 1.2rem;
-    font-weight: 750;
+.row-change-fields span {
+    overflow-wrap: anywhere;
 }
 
-.nutrition-grid small {
-    margin-left: 0.18rem;
-    color: #7a847b;
-    font-size: 0.68rem;
-    font-weight: 600;
+.worksheet-section {
+    margin-top: 3rem;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 253, 248, 0.8);
+}
+
+.data-table td {
+    min-width: 10rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(29, 41, 31, 0.14);
+    vertical-align: top;
+    white-space: pre-wrap;
+}
+
+.recipe-card p {
+    margin: 0.9rem 0 0;
+    color: #59645b;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tag-list li {
+    padding: 0.35rem 0.65rem;
+    color: #71401f;
+    background: rgba(238, 180, 91, 0.24);
+    font-size: 0.76rem;
+    font-weight: 700;
 }
 
 .empty-state {
@@ -397,7 +642,7 @@ code {
 }
 
 .loading-progress-text::after {
-    content: var(--blazor-load-percentage-text, "Loading");
+    content: var(--blazor-load-percentage-text, "");
 }
 
 @media (max-width: 760px) {
@@ -410,13 +655,10 @@ code {
         padding-top: 3.5rem;
     }
 
-    .hero h1 {
-        font-size: clamp(3rem, 16vw, 5rem);
-    }
-
     .control-panel,
     .notice-panel,
-    .results-heading {
+    .results-heading,
+    .route-heading {
         align-items: stretch;
         flex-direction: column;
     }
@@ -434,11 +676,17 @@ code {
         width: 100%;
     }
 
-    .food-grid {
+    .recipe-list {
         grid-template-columns: 1fr;
     }
 
-    .nutrition-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .row-change-heading {
+        align-items: flex-start;
+    }
+
+    .route-actions,
+    .tag-management-card {
+        align-items: stretch;
+        flex-direction: column;
     }
 }

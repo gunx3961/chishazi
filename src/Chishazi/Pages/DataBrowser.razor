@@ -1,0 +1,84 @@
+@page "/data"
+@inject SpreadsheetStore Store
+
+<PageTitle>@UiText.Get("AllDataTitle")</PageTitle>
+
+<main class="page-shell">
+    <div class="route-heading">
+        <div>
+            <p class="section-label">@UiText.Get("DataBrowserLabel")</p>
+            <h1>@UiText.Get("AllDataTitle")</h1>
+        </div>
+        <a class="text-link" href="">@UiText.Get("ReturnHome")</a>
+    </div>
+
+    @if (_snapshot is null)
+    {
+        <p class="empty-state">@UiText.Get("NoCachedDataForBrowser")</p>
+    }
+    else
+    {
+        <label class="search-field">
+            <span>@UiText.Get("SearchAllData")</span>
+            <input type="search"
+                   @bind="_query"
+                   @bind:event="oninput"
+                   placeholder="@UiText.Get("SearchDataPlaceholder")" />
+        </label>
+
+        @foreach (var worksheet in _snapshot.Worksheets)
+        {
+            var rows = FilterRows(worksheet);
+            <section class="worksheet-section">
+                <div class="results-heading">
+                    <h2>@worksheet.Name</h2>
+                    <span>@UiText.Get("RowsFound", rows.Count)</span>
+                </div>
+
+                @if (rows.Count == 0)
+                {
+                    <p class="empty-state">@UiText.Get("NoDataMatches")</p>
+                }
+                else
+                {
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <tbody>
+                                @foreach (var row in rows)
+                                {
+                                    <tr>
+                                        @foreach (var value in row)
+                                        {
+                                            <td>@SpreadsheetDiffService.ToDisplayText(value)</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </section>
+        }
+    }
+</main>
+
+@code {
+    private SpreadsheetSnapshot? _snapshot;
+    private string _query = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _snapshot = await Store.GetAsync();
+    }
+
+    private IReadOnlyList<IReadOnlyList<System.Text.Json.JsonElement>> FilterRows(
+        WorksheetSnapshot worksheet) =>
+        string.IsNullOrWhiteSpace(_query)
+            ? worksheet.Values
+            : worksheet.Values
+                .Where(row => row.Any(value =>
+                    SpreadsheetDiffService.ToDisplayText(value).Contains(
+                        _query,
+                        StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+}

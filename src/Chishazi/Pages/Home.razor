@@ -1,165 +1,266 @@
-﻿@page "/"
+@page "/"
 @inject GoogleAuthorizationService Authorization
 @inject GoogleSheetsClient SheetsClient
-@inject FoodSheetParser SheetParser
-@inject BrowserCacheService Cache
+@inject RecipeSheetParser RecipeParser
+@inject TagSheetParser TagParser
+@inject SpreadsheetDiffService DiffService
+@inject SpreadsheetStore Store
 @inject GoogleSheetsOptions Options
 
-<PageTitle>Chishazi Meal Decision</PageTitle>
+<PageTitle>@UiText.Get("AppTitle")</PageTitle>
 
 <main class="page-shell">
-    <header class="hero">
-        <p class="eyebrow">PERSONAL MEAL DECISIONS</p>
-        <h1>Make choosing what to eat easier.</h1>
-        <p class="hero-copy">
-            Keep your meal options in a private Google Sheet and use them as the
-            source for everyday food decisions.
-        </p>
-    </header>
-
     @if (!Options.IsConfigured)
     {
         <section class="notice-panel" aria-labelledby="setup-title">
             <div>
-                <p class="section-label">SETUP REQUIRED</p>
-                <h2 id="setup-title">Connect your private sheet</h2>
+                <p class="section-label">@UiText.Get("SetupRequired")</p>
+                <h2 id="setup-title">@UiText.Get("SetupTitle")</h2>
                 <p>
-                    Add your public OAuth Client ID and Spreadsheet ID to
-                    <code>wwwroot/appsettings.json</code>. Do not add a client secret
-                    or any token.
+                    @UiText.Get("SetupDescriptionBeforePath")
+                    <code>wwwroot/appsettings.json</code>.
+                    @UiText.Get("SetupDescriptionAfterPath")
                 </p>
             </div>
             <a class="text-link" href="https://github.com/gunx3961/chishazi/blob/master/documentation/setup.md"
-               target="_blank" rel="noreferrer">Open setup guide</a>
+               target="_blank" rel="noreferrer">@UiText.Get("OpenSetupGuide")</a>
         </section>
     }
     else
     {
-        <section class="control-panel" aria-label="Food data controls">
-            <div>
-                <p class="section-label">GOOGLE SHEETS</p>
-                <h2>@(_foods.Count == 0 ? "Load your food list" : $"{_foods.Count} foods loaded")</h2>
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <div class="message error-message" role="alert">
+                <strong>@UiText.Get("AttentionTitle")</strong>
+                <span>@_errorMessage</span>
+            </div>
+        }
+
+        @if (_rowErrors.Count > 0)
+        {
+            <details class="message warning-message">
+                <summary>@UiText.Get("RowValidationIssues", _rowErrors.Count)</summary>
+                <ul>
+                    @foreach (var rowError in _rowErrors)
+                    {
+                        <li>@rowError</li>
+                    }
+                </ul>
+            </details>
+        }
+
+        @if (_changeSet is not null)
+        {
+            <section class="preview-panel" aria-labelledby="upload-preview-title">
+                <div class="results-heading">
+                    <div>
+                        <p class="section-label">
+                            @UiText.Get(
+                                _previewMode == PreviewMode.Local
+                                    ? "LocalChangesPreviewLabel"
+                                    : "UploadPreviewLabel")
+                        </p>
+                        <h2 id="upload-preview-title">
+                            @UiText.Get(
+                                "UploadChangesFound",
+                                _changeSet.WorksheetCreations.Count,
+                                _changeSet.RowChanges.Count)
+                        </h2>
+                    </div>
+                    <button class="secondary-button" type="button" @onclick="CancelPreview">
+                        @UiText.Get("Cancel")
+                    </button>
+                </div>
+
+                @if (_changeSet.BlockingIssues.Count > 0)
+                {
+                    <div class="message error-message" role="alert">
+                        <ul>
+                            @foreach (var issue in _changeSet.BlockingIssues)
+                            {
+                                <li>@issue</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else if (!_changeSet.HasChanges)
+                {
+                    <p class="empty-state">@UiText.Get("NoUploadChanges")</p>
+                }
+                else
+                {
+                    @if (_changeSet.WorksheetCreations.Count > 0)
+                    {
+                        <div class="message warning-message">
+                            <strong>@UiText.Get("WorksheetsToCreate")</strong>
+                            <ul>
+                                @foreach (var creation in _changeSet.WorksheetCreations)
+                                {
+                                    <li>@creation.WorksheetName</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <div class="row-change-list">
+                        @foreach (var change in _changeSet.RowChanges)
+                        {
+                            <article class="row-change-card">
+                                <div class="row-change-heading">
+                                    <div>
+                                        <strong>@change.WorksheetName</strong>
+                                        <span>@UiText.Get("RowPosition", change.RowNumber)</span>
+                                    </div>
+                                    <span class="change-kind">@ChangeKindText(change.Kind)</span>
+                                </div>
+                                <ul class="row-change-fields">
+                                    @foreach (var field in change.Fields)
+                                    {
+                                        <li>
+                                            <strong>@field.ColumnName</strong>
+                                            <span>@DisplayFieldChange(field)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </article>
+                        }
+                    </div>
+
+                    @if (_previewMode == PreviewMode.Remote)
+                    {
+                        <button class="danger-button"
+                                type="button"
+                                disabled="@_isLoading"
+                                @onclick="UploadChangesAsync">
+                            @(_isLoading
+                                ? UiText.Get("Uploading")
+                                : UiText.Get(
+                                    "ConfirmUpload",
+                                    _changeSet.WorksheetCreations.Count,
+                                    _changeSet.RowChanges.Count))
+                        </button>
+                    }
+                }
+            </section>
+        }
+
+        @if (_confirmDiscard)
+        {
+            <section class="notice-panel" aria-labelledby="discard-title">
+                <div>
+                    <p class="section-label">@UiText.Get("DiscardLocalChangesLabel")</p>
+                    <h2 id="discard-title">@UiText.Get("DiscardLocalChangesTitle")</h2>
+                    <p>@UiText.Get("DiscardLocalChangesDescription")</p>
+                </div>
+                <div class="control-actions">
+                    <button class="danger-button"
+                            type="button"
+                            disabled="@_isLoading"
+                            @onclick="DiscardLocalChangesAsync">
+                        @UiText.Get("ConfirmDiscardLocalChanges")
+                    </button>
+                    <button class="secondary-button"
+                            type="button"
+                            @onclick="CancelDiscard">
+                        @UiText.Get("Cancel")
+                    </button>
+                </div>
+            </section>
+        }
+
+        <section class="control-panel sync-panel" aria-label="@UiText.Get("SpreadsheetDataControlsLabel")">
+            <div class="data-summary">
+                <p class="section-label">@UiText.Get("GoogleSheetsLabel")</p>
+                <div class="data-type-list">
+                    <a class="data-total-link" href="data/recipes">
+                        @UiText.Get("RecipesLoaded", _recipes.Count)
+                    </a>
+                    <a class="data-total-link" href="data/tags">
+                        @UiText.Get("TagsLoaded", _tags.Count)
+                    </a>
+                </div>
                 <p class="status-copy">@StatusMessage</p>
             </div>
             <div class="control-actions">
                 @if (_snapshot is not null)
                 {
-                    <button class="secondary-button" @onclick="ClearCacheAsync" disabled="@_isLoading">
-                        Clear cache
+                    <button class="secondary-button"
+                            type="button"
+                            @onclick="ClearCacheAsync"
+                            disabled="@_isLoading">
+                        @UiText.Get("ClearCache")
+                    </button>
+                    @if (HasPendingLocalChanges)
+                    {
+                        <button class="secondary-button"
+                                type="button"
+                                @onclick="ReviewLocalChanges"
+                                disabled="@_isLoading">
+                            @UiText.Get("ReviewLocalChanges")
+                        </button>
+                        <button class="secondary-button"
+                                type="button"
+                                @onclick="RequestDiscardLocalChanges"
+                                disabled="@_isLoading">
+                            @UiText.Get("DiscardLocalChanges")
+                        </button>
+                    }
+                    <button class="secondary-button"
+                            type="button"
+                            @onclick="PreviewUploadAsync"
+                            disabled="@_isLoading">
+                        @UiText.Get("PreviewUpload")
                     </button>
                 }
-                <button class="primary-button" @onclick="SyncSpreadsheetAsync" disabled="@_isLoading">
-                    @(_isLoading ? "Syncing..." : _snapshot is null ? "Authorize and sync" : "Sync spreadsheet")
+                <button class="primary-button"
+                        type="button"
+                        @onclick="PullSpreadsheetAsync"
+                        disabled="@_isLoading">
+                    @(_isLoading
+                        ? UiText.Get("Syncing")
+                        : _snapshot is null
+                            ? UiText.Get("AuthorizeAndPull")
+                            : UiText.Get("PullSpreadsheet"))
                 </button>
             </div>
-        </section>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(_errorMessage))
-    {
-        <div class="message error-message" role="alert">
-            <strong>Something needs attention.</strong>
-            <span>@_errorMessage</span>
-        </div>
-    }
-
-    @if (_rowErrors.Count > 0)
-    {
-        <details class="message warning-message">
-            <summary>@_rowErrors.Count row validation issue(s)</summary>
-            <ul>
-                @foreach (var rowError in _rowErrors)
-                {
-                    <li>@rowError</li>
-                }
-            </ul>
-        </details>
-    }
-
-    @if (_foods.Count > 0)
-    {
-        <section class="results-section" aria-labelledby="results-title">
-            <div class="results-heading">
-                <div>
-                    <p class="section-label">LOOKUP</p>
-                    <h2 id="results-title">Available meal options</h2>
-                </div>
-                <label class="search-field">
-                    <span>Search by name or category</span>
-                    <input type="search" @bind="_query" @bind:event="oninput"
-                           placeholder="Try rice or staples" />
-                </label>
-            </div>
-
-            @if (FilteredFoods.Count == 0)
-            {
-                <p class="empty-state">No foods match your search.</p>
-            }
-            else
-            {
-                <div class="food-grid">
-                    @foreach (var food in FilteredFoods)
-                    {
-                        <article class="food-card">
-                            <div class="food-card-title">
-                                <div>
-                                    <p class="category">@DisplayText(food.Category, "Uncategorized")</p>
-                                    <h3>@food.Name</h3>
-                                </div>
-                                <span class="serving">@DisplayText(food.Serving, "Per sheet value")</span>
-                            </div>
-
-                            <dl class="nutrition-grid">
-                                <div>
-                                    <dt>Calories</dt>
-                                    <dd>@DisplayNumber(food.CaloriesKcal)<small>kcal</small></dd>
-                                </div>
-                                <div>
-                                    <dt>Protein</dt>
-                                    <dd>@DisplayNumber(food.ProteinG)<small>g</small></dd>
-                                </div>
-                                <div>
-                                    <dt>Carbs</dt>
-                                    <dd>@DisplayNumber(food.CarbsG)<small>g</small></dd>
-                                </div>
-                                <div>
-                                    <dt>Fat</dt>
-                                    <dd>@DisplayNumber(food.FatG)<small>g</small></dd>
-                                </div>
-                            </dl>
-                        </article>
-                    }
-                </div>
-            }
         </section>
     }
 </main>
 
 @code {
-    private readonly List<FoodItem> _foods = [];
+    private readonly List<RecipeItem> _recipes = [];
+    private readonly List<TagItem> _tags = [];
     private readonly List<string> _rowErrors = [];
     private SpreadsheetSnapshot? _snapshot;
-    private string _query = string.Empty;
+    private SpreadsheetSnapshot? _baseline;
+    private SpreadsheetSnapshot? _previewRemote;
+    private SpreadsheetSnapshot? _previewFormulaView;
+    private SpreadsheetChangeSet? _changeSet;
+    private PreviewMode _previewMode;
     private string? _errorMessage;
     private bool _isLoading;
     private bool _loadedFromCache;
-
-    private string CacheKey => $"spreadsheet:{Options.SpreadsheetId}:snapshot:v1";
+    private bool _confirmDiscard;
 
     private string StatusMessage =>
         _snapshot is null
-            ? "No local spreadsheet data is available. Authorize once to create the cache."
-            : $"{(_loadedFromCache ? "Cached" : "Current")} snapshot of {_snapshot.Worksheets.Count} worksheet(s), " +
-              $"synced {_snapshot.FetchedAtUtc.ToLocalTime():yyyy-MM-dd HH:mm}.";
+            ? UiText.Get("NoCachedData")
+            : HasPendingLocalChanges
+                ? UiText.Get(
+                    "PendingLocalChangesStatus",
+                    PendingLocalChangeCount,
+                    _snapshot.FetchedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"))
+            : UiText.Get(
+                _loadedFromCache ? "CachedSnapshotStatus" : "CurrentSnapshotStatus",
+                _snapshot.Worksheets.Count,
+                _snapshot.FetchedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"));
 
-    private IReadOnlyList<FoodItem> FilteredFoods =>
-        string.IsNullOrWhiteSpace(_query)
-            ? _foods
-            : _foods
-                .Where(food =>
-                    food.Name.Contains(_query, StringComparison.OrdinalIgnoreCase) ||
-                    food.Category.Contains(_query, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+    private int PendingLocalChangeCount =>
+        _snapshot is not null && _baseline is not null
+            ? DiffService.Compare(_snapshot, _baseline).DisplayChangeCount
+            : 0;
+
+    private bool HasPendingLocalChanges => PendingLocalChangeCount > 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -170,42 +271,229 @@
 
         try
         {
-            var cached = await Cache.GetAsync<SpreadsheetSnapshot>(CacheKey);
-            if (cached is not null &&
-                cached.FormatVersion == SpreadsheetSnapshot.CurrentFormatVersion &&
-                cached.SpreadsheetId == Options.SpreadsheetId)
+            var cached = await Store.GetAsync();
+            if (cached is not null)
             {
+                _baseline = await Store.GetBaselineAsync();
+                if (_baseline is null)
+                {
+                    _baseline = cached with
+                    {
+                        Worksheets = cached.Worksheets
+                            .Where(worksheet => worksheet.SheetId >= 0)
+                            .ToList()
+                    };
+                    await Store.SetBaselineAsync(_baseline);
+                }
+
                 ApplySnapshot(cached, loadedFromCache: true);
             }
         }
         catch (JSException)
         {
-            _errorMessage = "The browser cache could not be read. You can still sync from Google Sheets.";
+            _errorMessage = UiText.Get("CacheReadFailed");
         }
     }
 
-    private async Task SyncSpreadsheetAsync()
+    private async Task PullSpreadsheetAsync()
     {
-        _isLoading = true;
-        _errorMessage = null;
-        _rowErrors.Clear();
-
-        try
+        if (HasPendingLocalChanges)
         {
-            var token = await Authorization.RequestAccessTokenAsync(Options.ClientId);
-            var snapshot = await SheetsClient.GetSpreadsheetAsync(
-                Options.SpreadsheetId,
-                token.AccessToken);
+            _errorMessage = UiText.Get("PullBlockedByLocalChanges");
+            return;
+        }
+
+        await RunOperationAsync(async () =>
+        {
+            var snapshot = await Authorization.ExecuteWithAccessTokenAsync(
+                Options.ClientId,
+                accessToken => SheetsClient.GetSpreadsheetAsync(
+                    Options.SpreadsheetId,
+                    accessToken));
             ApplySnapshot(snapshot, loadedFromCache: false);
+            CancelPreview();
 
             try
             {
-                await Cache.SetAsync(CacheKey, snapshot);
+                await Store.SetSynchronizedAsync(snapshot);
+                _baseline = snapshot;
             }
             catch (JSException)
             {
-                _errorMessage = "Fresh data was loaded, but the browser cache could not be updated.";
+                _errorMessage = UiText.Get("CacheWriteFailed");
             }
+        });
+    }
+
+    private async Task PreviewUploadAsync()
+    {
+        if (_snapshot is null || _baseline is null)
+        {
+            return;
+        }
+
+        await RunOperationAsync(async () =>
+        {
+            var preview = await Authorization.ExecuteWithAccessTokenAsync(
+                Options.ClientId,
+                async accessToken =>
+                {
+                    var remote = await SheetsClient.GetSpreadsheetAsync(
+                        Options.SpreadsheetId,
+                        accessToken);
+                    var formulaView =
+                        await SheetsClient.GetSpreadsheetFormulaViewAsync(
+                            Options.SpreadsheetId,
+                            accessToken);
+                    return (remote, formulaView);
+                });
+            _previewRemote = preview.remote;
+            _previewFormulaView = preview.formulaView;
+            _changeSet = DiffService.BlockRemoteFormulaOverwrites(
+                DiffService.PrepareUpload(
+                    _snapshot,
+                    _baseline,
+                    _previewRemote),
+                _previewFormulaView);
+            _previewMode = PreviewMode.Remote;
+        });
+    }
+
+    private void ReviewLocalChanges()
+    {
+        if (_snapshot is null || _baseline is null)
+        {
+            return;
+        }
+
+        _previewRemote = null;
+        _previewFormulaView = null;
+        _changeSet = DiffService.Compare(_snapshot, _baseline);
+        _previewMode = PreviewMode.Local;
+        _confirmDiscard = false;
+    }
+
+    private async Task UploadChangesAsync()
+    {
+        if (_snapshot is null ||
+            _baseline is null ||
+            _changeSet is null ||
+            _previewMode != PreviewMode.Remote ||
+            !_changeSet.CanUpload ||
+            !_changeSet.HasChanges)
+        {
+            return;
+        }
+
+        await RunOperationAsync(async () =>
+        {
+            var current = await Authorization.ExecuteWithAccessTokenAsync(
+                Options.ClientId,
+                async accessToken =>
+                {
+                    var remote = await SheetsClient.GetSpreadsheetAsync(
+                        Options.SpreadsheetId,
+                        accessToken);
+                    var formulaView =
+                        await SheetsClient.GetSpreadsheetFormulaViewAsync(
+                            Options.SpreadsheetId,
+                            accessToken);
+                    return (remote, formulaView);
+                });
+            var currentRemote = current.remote;
+            var currentFormulaView = current.formulaView;
+            var currentChangeSet = DiffService.BlockRemoteFormulaOverwrites(
+                DiffService.PrepareUpload(
+                    _snapshot,
+                    _baseline,
+                    currentRemote),
+                currentFormulaView);
+
+            if (!currentChangeSet.CanUpload)
+            {
+                _errorMessage = UiText.Get("RemoteChangedSincePreview");
+                CancelPreview();
+                return;
+            }
+
+            await Authorization.ExecuteWithAccessTokenAsync(
+                Options.ClientId,
+                accessToken => SheetsClient.ApplyChangesAsync(
+                    Options.SpreadsheetId,
+                    accessToken,
+                    _snapshot,
+                    currentChangeSet));
+
+            var refreshed = await Authorization.ExecuteWithAccessTokenAsync(
+                Options.ClientId,
+                accessToken => SheetsClient.GetSpreadsheetAsync(
+                    Options.SpreadsheetId,
+                    accessToken));
+            ApplySnapshot(refreshed, loadedFromCache: false);
+            await Store.SetSynchronizedAsync(refreshed);
+            _baseline = refreshed;
+            CancelPreview();
+        });
+    }
+
+    private async Task ClearCacheAsync()
+    {
+        try
+        {
+            await Store.RemoveAsync();
+            _snapshot = null;
+            _baseline = null;
+            _recipes.Clear();
+            _tags.Clear();
+            _rowErrors.Clear();
+            _errorMessage = null;
+            _loadedFromCache = false;
+            _confirmDiscard = false;
+            CancelPreview();
+        }
+        catch (JSException)
+        {
+            _errorMessage = UiText.Get("CacheClearFailed");
+        }
+    }
+
+    private void RequestDiscardLocalChanges()
+    {
+        _confirmDiscard = true;
+        _errorMessage = null;
+    }
+
+    private void CancelDiscard()
+    {
+        _confirmDiscard = false;
+    }
+
+    private async Task DiscardLocalChangesAsync()
+    {
+        await RunOperationAsync(async () =>
+        {
+            var baseline = await Store.DiscardLocalChangesAsync();
+            if (baseline is null)
+            {
+                _errorMessage = UiText.Get("NoBaselineToRestore");
+                return;
+            }
+
+            _baseline = baseline;
+            ApplySnapshot(baseline, loadedFromCache: true);
+            _confirmDiscard = false;
+            CancelPreview();
+        });
+    }
+
+    private async Task RunOperationAsync(Func<Task> operation)
+    {
+        _isLoading = true;
+        _errorMessage = null;
+
+        try
+        {
+            await operation();
         }
         catch (GoogleSheetsException exception)
         {
@@ -213,15 +501,15 @@
         }
         catch (JSException exception)
         {
-            _errorMessage = exception.Message;
+            _errorMessage = LocalizeJavaScriptError(exception.Message);
         }
         catch (OperationCanceledException)
         {
-            _errorMessage = "The request was canceled. Try again.";
+            _errorMessage = UiText.Get("RequestCanceled");
         }
         catch (Exception)
         {
-            _errorMessage = "An unexpected error occurred. Reload the page and try again.";
+            _errorMessage = UiText.Get("UnexpectedError");
         }
         finally
         {
@@ -229,39 +517,61 @@
         }
     }
 
-    private async Task ClearCacheAsync()
-    {
-        try
-        {
-            await Cache.RemoveAsync(CacheKey);
-            _snapshot = null;
-            _foods.Clear();
-            _rowErrors.Clear();
-            _query = string.Empty;
-            _errorMessage = null;
-            _loadedFromCache = false;
-        }
-        catch (JSException)
-        {
-            _errorMessage = "The browser cache could not be cleared.";
-        }
-    }
-
     private void ApplySnapshot(SpreadsheetSnapshot snapshot, bool loadedFromCache)
     {
-        var result = SheetParser.Parse(snapshot);
+        var result = RecipeParser.Parse(snapshot);
+        var tagResult = TagParser.Parse(snapshot);
 
         _snapshot = snapshot;
         _loadedFromCache = loadedFromCache;
-        _foods.Clear();
-        _foods.AddRange(result.Foods);
+        _recipes.Clear();
+        _recipes.AddRange(result.Recipes);
+        _tags.Clear();
+        _tags.AddRange(tagResult.Tags);
         _rowErrors.Clear();
         _rowErrors.AddRange(result.Errors);
     }
 
-    private static string DisplayText(string value, string fallback) =>
-        string.IsNullOrWhiteSpace(value) ? fallback : value;
+    private void CancelPreview()
+    {
+        _previewRemote = null;
+        _previewFormulaView = null;
+        _changeSet = null;
+        _previewMode = PreviewMode.None;
+    }
 
-    private static string DisplayNumber(decimal? value) =>
-        value?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) ?? "—";
+    private static string DisplayChangeValue(string value) =>
+        string.IsNullOrEmpty(value) ? UiText.Get("EmptyValue") : value;
+
+    private static string DisplayFieldChange(SpreadsheetCellChange change) =>
+        change.Kind == SpreadsheetCellChangeKind.Added
+            ? DisplayChangeValue(change.After)
+            : UiText.Get(
+                "ValueTransition",
+                DisplayChangeValue(change.Before),
+                DisplayChangeValue(change.After));
+
+    private static string ChangeKindText(SpreadsheetCellChangeKind kind) =>
+        kind switch
+        {
+            SpreadsheetCellChangeKind.Added => UiText.Get("ChangeAdded"),
+            SpreadsheetCellChangeKind.Cleared => UiText.Get("ChangeCleared"),
+            _ => UiText.Get("ChangeModified")
+        };
+
+    private static string LocalizeJavaScriptError(string errorCode) =>
+        errorCode switch
+        {
+            "CHISHAZI_GOOGLE_IDENTITY_UNAVAILABLE" => UiText.Get("GoogleIdentityUnavailable"),
+            "CHISHAZI_GOOGLE_AUTH_CANCELED" => UiText.Get("GoogleAuthorizationCanceled"),
+            "CHISHAZI_GOOGLE_AUTH_FAILED" => UiText.Get("GoogleAuthorizationFailed"),
+            _ => errorCode
+        };
+
+    private enum PreviewMode
+    {
+        None,
+        Local,
+        Remote
+    }
 }

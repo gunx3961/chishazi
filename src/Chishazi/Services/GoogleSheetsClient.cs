@@ -1,7 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Chishazi.Models;
+using Chishazi.Localization;
 
 namespace Chishazi.Services;
 
@@ -13,6 +15,31 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
         string spreadsheetId,
         string accessToken,
         CancellationToken cancellationToken = default)
+    {
+        return await GetSpreadsheetAsync(
+            spreadsheetId,
+            accessToken,
+            "UNFORMATTED_VALUE",
+            cancellationToken);
+    }
+
+    public async Task<SpreadsheetSnapshot> GetSpreadsheetFormulaViewAsync(
+        string spreadsheetId,
+        string accessToken,
+        CancellationToken cancellationToken = default)
+    {
+        return await GetSpreadsheetAsync(
+            spreadsheetId,
+            accessToken,
+            "FORMULA",
+            cancellationToken);
+    }
+
+    private async Task<SpreadsheetSnapshot> GetSpreadsheetAsync(
+        string spreadsheetId,
+        string accessToken,
+        string valueRenderOption,
+        CancellationToken cancellationToken)
     {
         var metadata = await GetMetadataAsync(
             spreadsheetId,
@@ -37,6 +64,7 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
             spreadsheetId,
             orderedSheets,
             accessToken,
+            valueRenderOption,
             cancellationToken);
         var worksheets = orderedSheets
             .Select((sheet, index) => new WorksheetSnapshot(
@@ -57,6 +85,99 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
             worksheets);
     }
 
+    public async Task ApplyChangesAsync(
+        string spreadsheetId,
+        string accessToken,
+        SpreadsheetSnapshot localSnapshot,
+        SpreadsheetChangeSet changeSet,
+        CancellationToken cancellationToken = default)
+    {
+        if (!changeSet.HasChanges)
+        {
+            return;
+        }
+
+        var encodedSpreadsheetId = Uri.EscapeDataString(spreadsheetId);
+        var requestUri = $"{SheetsApiBaseUrl}/{encodedSpreadsheetId}:batchUpdate";
+        var existingSheetIds = localSnapshot.Worksheets
+            .Where(worksheet => worksheet.SheetId >= 0)
+            .Select(worksheet => worksheet.SheetId)
+            .ToHashSet();
+        var nextSheetId = existingSheetIds.DefaultIfEmpty(0).Max() + 1;
+        var createdSheetIds = new Dictionary<int, int>();
+        var requests = new List<object>();
+
+        foreach (var creation in changeSet.WorksheetCreations)
+        {
+            while (existingSheetIds.Contains(nextSheetId))
+            {
+                nextSheetId++;
+            }
+
+            var sheetId = nextSheetId++;
+            existingSheetIds.Add(sheetId);
+            createdSheetIds[creation.TemporarySheetId] = sheetId;
+            requests.Add(new
+            {
+                addSheet = new
+                {
+                    properties = new
+                    {
+                        sheetId,
+                        title = creation.WorksheetName
+                    }
+                }
+            });
+        }
+
+        foreach (var change in changeSet.Changes)
+        {
+            var remoteSheetId = createdSheetIds.GetValueOrDefault(
+                change.SheetId,
+                change.SheetId);
+            requests.Add(new
+            {
+                updateCells = new
+                {
+                    rows = new[]
+                    {
+                        new
+                        {
+                            values = new[]
+                            {
+                                CreateCellData(GetCellValue(localSnapshot, change))
+                            }
+                        }
+                    },
+                    fields = "userEnteredValue",
+                    range = new
+                    {
+                        sheetId = remoteSheetId,
+                        startRowIndex = change.RowNumber - 1,
+                        endRowIndex = change.RowNumber,
+                        startColumnIndex = change.ColumnNumber - 1,
+                        endColumnIndex = change.ColumnNumber
+                    }
+                }
+            });
+        }
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+        {
+            Content = JsonContent.Create(new { requests })
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await httpClient.SendAsync(request, cancellationToken);
+        if (response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        var error = await TryReadErrorAsync(response, cancellationToken);
+        throw CreateException(response.StatusCode, error?.Error);
+    }
+
     internal static string ToWholeWorksheetRange(string worksheetName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(worksheetName);
@@ -65,7 +186,8 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
 
     internal static string BuildBatchValuesRequestUri(
         string spreadsheetId,
-        IEnumerable<string> worksheetNames)
+        IEnumerable<string> worksheetNames,
+        string valueRenderOption = "UNFORMATTED_VALUE")
     {
         var encodedSpreadsheetId = Uri.EscapeDataString(spreadsheetId);
         var ranges = worksheetNames
@@ -74,7 +196,52 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
         var query = string.Join("&", ranges);
 
         return $"{SheetsApiBaseUrl}/{encodedSpreadsheetId}/values:batchGet" +
-               $"?{query}&majorDimension=ROWS&valueRenderOption=UNFORMATTED_VALUE";
+               $"?{query}&majorDimension=ROWS&valueRenderOption={valueRenderOption}";
+    }
+
+    private static object CreateCellData(JsonElement? value)
+    {
+        if (value is null ||
+            value.Value.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined ||
+            value.Value.ValueKind == JsonValueKind.String &&
+            string.IsNullOrEmpty(value.Value.GetString()))
+        {
+            return new { };
+        }
+
+        object userEnteredValue = value.Value.ValueKind switch
+        {
+            JsonValueKind.String =>
+                new { stringValue = value.Value.GetString() },
+            JsonValueKind.Number =>
+                new { numberValue = value.Value.GetDouble() },
+            JsonValueKind.True =>
+                new { boolValue = true },
+            JsonValueKind.False =>
+                new { boolValue = false },
+            _ =>
+                new { stringValue = value.Value.ToString() }
+        };
+
+        return new { userEnteredValue };
+    }
+
+    private static JsonElement? GetCellValue(
+        SpreadsheetSnapshot snapshot,
+        SpreadsheetCellChange change)
+    {
+        var worksheet = snapshot.Worksheets.Single(
+            candidate => candidate.SheetId == change.SheetId);
+        var rowIndex = change.RowNumber - 1;
+        var columnIndex = change.ColumnNumber - 1;
+
+        if (rowIndex >= worksheet.Values.Count ||
+            columnIndex >= worksheet.Values[rowIndex].Count)
+        {
+            return null;
+        }
+
+        return worksheet.Values[rowIndex][columnIndex];
     }
 
     private async Task<GoogleSpreadsheetMetadata> GetMetadataAsync(
@@ -98,11 +265,13 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
         string spreadsheetId,
         IReadOnlyList<GoogleSheetProperties> sheets,
         string accessToken,
+        string valueRenderOption,
         CancellationToken cancellationToken)
     {
         var requestUri = BuildBatchValuesRequestUri(
             spreadsheetId,
-            sheets.Select(sheet => sheet.Title));
+            sheets.Select(sheet => sheet.Title),
+            valueRenderOption);
 
         return await SendAsync<GoogleBatchValueResponse>(
             requestUri,
@@ -153,17 +322,17 @@ public sealed class GoogleSheetsClient(HttpClient httpClient)
         var message = statusCode switch
         {
             HttpStatusCode.Unauthorized =>
-                "Google authorization expired or was rejected. Authorize again.",
+                UiText.Get("GoogleAuthorizationExpired"),
             HttpStatusCode.Forbidden =>
-                "This Google account cannot read the spreadsheet. Check the sheet sharing settings and OAuth scope.",
+                UiText.Get("GoogleSpreadsheetForbidden"),
             HttpStatusCode.NotFound =>
-                "The spreadsheet was not found. Check the Spreadsheet ID and sharing settings.",
+                UiText.Get("GoogleSpreadsheetNotFound"),
             HttpStatusCode.BadRequest =>
-                "Google rejected the spreadsheet request. Check the spreadsheet structure.",
+                UiText.Get("GoogleSpreadsheetBadRequest"),
             (HttpStatusCode)429 =>
-                "The Google Sheets request limit was reached. Wait briefly and try again.",
+                UiText.Get("GoogleSheetsRateLimited"),
             _ =>
-                $"Google Sheets returned an unexpected error ({(int)statusCode}). Try again."
+                UiText.Get("GoogleSheetsUnexpectedError", (int)statusCode)
         };
 
         return new GoogleSheetsException(statusCode, message, error?.Status);

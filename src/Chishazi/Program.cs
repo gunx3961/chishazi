@@ -17,6 +17,10 @@ builder.Services.AddSingleton(new GoogleSheetsOptions
 builder.Services.AddScoped<GoogleAuthorizationService>();
 builder.Services.AddScoped<GoogleSheetsClient>();
 builder.Services.AddScoped<BrowserCacheService>();
-builder.Services.AddSingleton<FoodSheetParser>();
+builder.Services.AddScoped<SpreadsheetStore>();
+builder.Services.AddSingleton<TagSheetParser>();
+builder.Services.AddSingleton<RecipeSheetParser>();
+builder.Services.AddSingleton<SpreadsheetDiffService>();
+builder.Services.AddSingleton<SpreadsheetMutationService>();
 
 await builder.Build().RunAsync();

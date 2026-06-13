@@ -20,8 +20,8 @@ These rules apply to the entire repository.
   on GitHub Pages.
 - The data source is a private Google Sheet accessed through the Google Sheets
   API after interactive user authorization.
-- The minimum version is read-only. Do not request write scopes unless the
-  product requirement changes.
+- Google authorization requests the complete Sheets scope once per token.
+  Upload operations still require an explicit preview and confirmation.
 
 ## Security
 
@@ -29,24 +29,53 @@ These rules apply to the entire repository.
   refresh tokens, cookies, or exported Google credentials.
 - OAuth Client IDs and Spreadsheet IDs are public identifiers and may be kept
   in client configuration, but use placeholders in the repository by default.
-- Keep access tokens in memory only. Do not write them to browser storage,
-  URLs, logs, analytics, or exception messages.
-- Request only the
-  `https://www.googleapis.com/auth/spreadsheets.readonly` scope.
+- Access tokens may be stored only in the dedicated localStorage authorization
+  entry with an absolute expiration time. Do not write them to IndexedDB,
+  cookies, URLs, logs, analytics, or exception messages.
+- Reuse the access token until its reported expiration. If Google returns 401,
+  invalidate it, request a new token, and retry the failed operation once.
+- Request `https://www.googleapis.com/auth/spreadsheets` for the shared
+  application token.
 - Treat all Google Sheet cell values as untrusted text. Do not render them as
   raw HTML.
 - Spreadsheet snapshots may be stored in IndexedDB, but OAuth credentials may
-  not be included in cached data.
+  not be included in snapshot data.
 
 ## Engineering
 
+- Treat minimalism as a primary product and engineering principle. Do not
+  expose fields, controls, states, or abstractions without a current user need.
 - Target the .NET version declared by `global.json`.
 - Keep Google authorization, Sheets transport, row parsing, and UI state in
   separate components.
 - Keep browser caching schema-neutral. Cache raw spreadsheet snapshots and
   apply worksheet definitions after loading.
+- Keep upload comparison and transport schema-neutral.
+- Keep local row mutation schema-neutral. Type routes may append batches to
+  the shared working snapshot through generic worksheet definitions.
+- Keep the last synchronized baseline separate from the local working snapshot.
+- Do not mutate the working snapshot during ordinary cache reads.
+- Do not pull remote data over pending local changes.
+- Local change review and discard must use the cached baseline without
+  contacting Google.
+- Reject uploads when worksheet structure differs between local and remote
+  snapshots.
+- Recheck remote data after preview and before upload.
+- Update only changed cells. Do not overwrite unchanged cells.
+- Present synchronization diffs by row in the UI while retaining cell-level
+  transport and formula protection internally.
+- Derive upload intent only from working-copy changes against the synchronized
+  baseline. Never convert unrelated remote differences into upload changes.
 - Treat `src/Chishazi/DataDefinitions/SpreadsheetDefinition.cs` as the source
   of truth for worksheet data contracts.
+- Define controlled-value worksheet structures in `SpreadsheetDefinition.cs`.
+  Store and manage the actual values in the spreadsheet, not in code.
+- Tag IDs are internal and automatically managed. User-facing Tag workflows
+  interact only with display names.
+- Treat `src/Chishazi/Resources/UiText.resx` as the source of truth for all
+  user-visible application text.
+- Do not place user-visible sentences directly in Razor components, services,
+  or JavaScript.
 - Prefer platform APIs and small local abstractions over additional packages.
 - Add or update focused tests when parsing rules or data contracts change.
 - Do not modify unrelated Godot files or generated `.godot` content.
@@ -61,6 +90,8 @@ These rules apply to the entire repository.
 - Update `documentation/architecture.md` when component boundaries, security boundaries,
   or external integrations change.
 - Update `documentation/data-contract.md` when worksheet definitions change.
+- Update `documentation/localization.md` when localization conventions or
+  culture selection behavior changes.
 
 ## Completion Checks
 

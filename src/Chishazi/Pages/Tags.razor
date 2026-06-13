@@ -1,0 +1,296 @@
+@page "/data/tags"
+@inject SpreadsheetStore Store
+@inject TagSheetParser TagParser
+@inject SpreadsheetMutationService MutationService
+
+<PageTitle>@UiText.Get("TagListTitle")</PageTitle>
+
+<main class="page-shell">
+    <div class="route-heading">
+        <div>
+            <p class="section-label">@UiText.Get("DataBrowserLabel")</p>
+            <h1>@UiText.Get("TagListTitle")</h1>
+        </div>
+        <div class="route-actions">
+            <a class="text-link" href="data/recipes">@UiText.Get("ReturnToRecipes")</a>
+            <a class="text-link" href="">@UiText.Get("ReturnHome")</a>
+        </div>
+    </div>
+
+    @if (_snapshot is null)
+    {
+        <p class="empty-state">@UiText.Get("NoCachedDataForBrowser")</p>
+    }
+    else
+    {
+        @if (!string.IsNullOrWhiteSpace(_formMessage))
+        {
+            <div class="message @(_formHasError ? "error-message" : "success-message")"
+                 role="@(_formHasError ? "alert" : "status")">
+                <span>@_formMessage</span>
+            </div>
+        }
+
+        @if (_errors.Count > 0)
+        {
+            <details class="message warning-message">
+                <summary>@UiText.Get("RowValidationIssues", _errors.Count)</summary>
+                <ul>
+                    @foreach (var error in _errors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </details>
+        }
+
+        <section class="entry-panel" aria-labelledby="add-tags-title">
+            <div class="results-heading">
+                <div>
+                    <p class="section-label">@UiText.Get("LocalChangesLabel")</p>
+                    <h2 id="add-tags-title">@UiText.Get("AddTagsTitle")</h2>
+                </div>
+                <button class="secondary-button" type="button" @onclick="AddDraft">
+                    @UiText.Get("AddAnotherTag")
+                </button>
+            </div>
+
+            <div class="draft-list">
+                @foreach (var draft in _drafts)
+                {
+                    <fieldset class="draft-card">
+                        <legend>@UiText.Get("TagDraftNumber", _drafts.IndexOf(draft) + 1)</legend>
+
+                        <label class="form-field">
+                            <span>@UiText.Get("TagDisplayNameLabel")</span>
+                            <input @bind="draft.DisplayName"
+                                   placeholder="@UiText.Get("TagDisplayNamePlaceholder")" />
+                        </label>
+
+                        @if (_drafts.Count > 1)
+                        {
+                            <button class="text-button"
+                                    type="button"
+                                    @onclick="() => RemoveDraft(draft)">
+                                @UiText.Get("RemoveTagDraft")
+                            </button>
+                        }
+                    </fieldset>
+                }
+            </div>
+
+            <button class="primary-button"
+                    type="button"
+                    disabled="@_isSaving"
+                    @onclick="AddTagsAsync">
+                @(_isSaving
+                    ? UiText.Get("SavingLocalChanges")
+                    : UiText.Get("AddTagsToLocalChanges", _drafts.Count))
+            </button>
+        </section>
+
+        <section class="results-section" aria-labelledby="tag-browser-title">
+            <div class="results-heading">
+                <h2 id="tag-browser-title">@UiText.Get("AvailableTagsTitle")</h2>
+                <span>@UiText.Get("TagsLoaded", _tags.Count)</span>
+            </div>
+
+            <div class="tag-management-list">
+                @foreach (var tag in _tags)
+                {
+                    <article class="tag-management-card">
+                        <div class="tag-management-details">
+                            <label class="form-field">
+                                <span>@UiText.Get("TagDisplayNameLabel")</span>
+                                <input @bind="_tagDisplayNames[tag.RowNumber]" />
+                            </label>
+                            <button class="text-button"
+                                    type="button"
+                                    @onclick="() => UpdateTagDisplayNameAsync(tag)">
+                                @UiText.Get("SaveTagDisplayName")
+                            </button>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+</main>
+
+@code {
+    private readonly List<TagItem> _tags = [];
+    private readonly Dictionary<int, string> _tagDisplayNames = [];
+    private readonly List<string> _errors = [];
+    private readonly List<TagDraft> _drafts = [new()];
+    private SpreadsheetSnapshot? _snapshot;
+    private string? _formMessage;
+    private bool _formHasError;
+    private bool _isSaving;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _snapshot = await Store.GetAsync();
+        ParseSnapshot();
+    }
+
+    private void AddDraft()
+    {
+        _drafts.Add(new TagDraft());
+    }
+
+    private void RemoveDraft(TagDraft draft)
+    {
+        _drafts.Remove(draft);
+    }
+
+    private async Task AddTagsAsync()
+    {
+        if (_snapshot is null)
+        {
+            return;
+        }
+
+        _isSaving = true;
+        _formMessage = null;
+        _formHasError = false;
+
+        try
+        {
+            var validationError = ValidateDrafts();
+            if (validationError is not null)
+            {
+                _formMessage = validationError;
+                _formHasError = true;
+                return;
+            }
+
+            var rows = _drafts
+                .Select(draft => (IReadOnlyDictionary<string, string>)
+                    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["id"] = Guid.NewGuid().ToString("N"),
+                        ["displayName"] = draft.DisplayName.Trim()
+                    })
+                .ToList();
+
+            _snapshot = MutationService.AppendRows(
+                _snapshot,
+                SpreadsheetDefinition.Tag,
+                rows);
+            await Store.SetAsync(_snapshot);
+            ParseSnapshot();
+            _drafts.Clear();
+            _drafts.Add(new TagDraft());
+            _formMessage = UiText.Get("TagsAddedLocally", rows.Count);
+        }
+        catch (Exception)
+        {
+            _formMessage = UiText.Get("LocalTagChangesSaveFailed");
+            _formHasError = true;
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private async Task UpdateTagDisplayNameAsync(TagItem tag)
+    {
+        if (_snapshot is null ||
+            !_tagDisplayNames.TryGetValue(tag.RowNumber, out var displayName) ||
+            string.IsNullOrWhiteSpace(displayName))
+        {
+            _formMessage = UiText.Get("TagDisplayNameRequired");
+            _formHasError = true;
+            return;
+        }
+
+        displayName = displayName.Trim();
+        if (_tags.Any(candidate =>
+                candidate.RowNumber != tag.RowNumber &&
+                candidate.DisplayName.Equals(
+                    displayName,
+                    StringComparison.OrdinalIgnoreCase)))
+        {
+            _formMessage = UiText.Get(
+                "TagDisplayNameAlreadyExists",
+                displayName);
+            _formHasError = true;
+            return;
+        }
+
+        try
+        {
+            _snapshot = MutationService.UpdateRow(
+                _snapshot,
+                SpreadsheetDefinition.Tag,
+                tag.RowNumber,
+                new Dictionary<string, string>
+                {
+                    ["displayName"] = displayName
+                });
+            await Store.SetAsync(_snapshot);
+            ParseSnapshot();
+            _formMessage = UiText.Get(
+                "TagDisplayNameUpdatedLocally",
+                displayName);
+            _formHasError = false;
+        }
+        catch (Exception)
+        {
+            _formMessage = UiText.Get("LocalTagChangesSaveFailed");
+            _formHasError = true;
+        }
+    }
+
+    private string? ValidateDrafts()
+    {
+        if (_drafts.Any(draft =>
+                string.IsNullOrWhiteSpace(draft.DisplayName)))
+        {
+            return UiText.Get("AllTagDisplayNamesRequired");
+        }
+
+        var existingDisplayNames = _tags
+            .Select(tag => tag.DisplayName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var draftDisplayNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var draft in _drafts)
+        {
+            var displayName = draft.DisplayName.Trim();
+            if (existingDisplayNames.Contains(displayName) ||
+                !draftDisplayNames.Add(displayName))
+            {
+                return UiText.Get("TagDisplayNameAlreadyExists", displayName);
+            }
+        }
+
+        return null;
+    }
+
+    private void ParseSnapshot()
+    {
+        _tags.Clear();
+        _errors.Clear();
+        _tagDisplayNames.Clear();
+
+        if (_snapshot is null)
+        {
+            return;
+        }
+
+        var result = TagParser.Parse(_snapshot);
+        _tags.AddRange(result.Tags);
+        foreach (var tag in result.Tags)
+        {
+            _tagDisplayNames[tag.RowNumber] = tag.DisplayName;
+        }
+        _errors.AddRange(result.Errors);
+    }
+
+    private sealed class TagDraft
+    {
+        public string DisplayName { get; set; } = string.Empty;
+    }
+}

@@ -4,3 +4,9 @@
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 </Router>
+
+<div id="blazor-error-ui">
+    @UiText.Get("UnhandledError")
+    <a href="." class="reload">@UiText.Get("Reload")</a>
+    <span class="dismiss">@UiText.Get("Close")</span>
+</div>

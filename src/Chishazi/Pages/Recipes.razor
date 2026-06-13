@@ -1,0 +1,500 @@
+@page "/data/recipes"
+@inject SpreadsheetStore Store
+@inject RecipeSheetParser RecipeParser
+@inject TagSheetParser TagParser
+@inject SpreadsheetMutationService MutationService
+
+<PageTitle>@UiText.Get("RecipeListTitle")</PageTitle>
+
+<main class="page-shell">
+    <div class="route-heading">
+        <div>
+            <p class="section-label">@UiText.Get("DataBrowserLabel")</p>
+            <h1>@UiText.Get("RecipeListTitle")</h1>
+        </div>
+        <div class="route-actions">
+            <a class="text-link" href="data/tags">@UiText.Get("ManageTags")</a>
+            <a class="text-link" href="">@UiText.Get("ReturnHome")</a>
+        </div>
+    </div>
+
+    @if (_snapshot is null)
+    {
+        <p class="empty-state">@UiText.Get("NoCachedDataForBrowser")</p>
+    }
+    else
+    {
+        @if (!string.IsNullOrWhiteSpace(_formMessage))
+        {
+            <div class="message @(_formHasError ? "error-message" : "success-message")"
+                 role="@(_formHasError ? "alert" : "status")">
+                <span>@_formMessage</span>
+            </div>
+        }
+
+        @if (_errors.Count > 0)
+        {
+            <details class="message warning-message">
+                <summary>@UiText.Get("RowValidationIssues", _errors.Count)</summary>
+                <ul>
+                    @foreach (var error in _errors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </details>
+        }
+
+        <section class="entry-panel" aria-labelledby="add-recipes-title">
+            <div class="results-heading">
+                <div>
+                    <p class="section-label">@UiText.Get("LocalChangesLabel")</p>
+                    <h2 id="add-recipes-title">@UiText.Get("AddRecipesTitle")</h2>
+                </div>
+                <button class="secondary-button" type="button" @onclick="AddDraft">
+                    @UiText.Get("AddAnotherRecipe")
+                </button>
+            </div>
+
+            <div class="draft-list">
+                @foreach (var draft in _drafts)
+                {
+                    <fieldset class="draft-card">
+                        <legend>@UiText.Get("RecipeDraftNumber", _drafts.IndexOf(draft) + 1)</legend>
+
+                        <label class="form-field">
+                            <span>@UiText.Get("RecipeNameLabel")</span>
+                            <input @bind="draft.Name"
+                                   placeholder="@UiText.Get("RecipeNamePlaceholder")" />
+                        </label>
+
+                        <label class="form-field">
+                            <span>@UiText.Get("RecipeDescriptionLabel")</span>
+                            <textarea @bind="draft.Description"
+                                      placeholder="@UiText.Get("RecipeDescriptionPlaceholder")"></textarea>
+                        </label>
+
+                        <fieldset class="tag-selector">
+                            <legend>@UiText.Get("TagsLabel")</legend>
+                            @foreach (var tag in _tags)
+                            {
+                                <label>
+                                    <input type="checkbox"
+                                           checked="@draft.Tags.Contains(tag.Id)"
+                                           @onchange="eventArgs => SetTag(
+                                               draft,
+                                               tag.Id,
+                                               eventArgs.Value is true)" />
+                                    <span>@tag.DisplayName</span>
+                                </label>
+                            }
+                            @if (_tags.Count == 0)
+                            {
+                                <span class="muted-copy">@UiText.Get("NoTags")</span>
+                            }
+                        </fieldset>
+
+                        @if (_drafts.Count > 1)
+                        {
+                            <button class="text-button"
+                                    type="button"
+                                    @onclick="() => RemoveDraft(draft)">
+                                @UiText.Get("RemoveRecipeDraft")
+                            </button>
+                        }
+                    </fieldset>
+                }
+            </div>
+
+            <button class="primary-button"
+                    type="button"
+                    disabled="@_isSaving"
+                    @onclick="AddDraftsToLocalSnapshotAsync">
+                @(_isSaving
+                    ? UiText.Get("SavingLocalChanges")
+                    : UiText.Get("AddRecipesToLocalChanges", _drafts.Count))
+            </button>
+        </section>
+
+        <section class="results-section" aria-labelledby="recipe-browser-title">
+            <div class="results-heading">
+                <h2 id="recipe-browser-title">@UiText.Get("AvailableRecipesTitle")</h2>
+                <span>@UiText.Get("RecipesLoaded", _recipes.Count)</span>
+            </div>
+
+            <label class="search-field">
+                <span>@UiText.Get("SearchRecipes")</span>
+                <input type="search"
+                       @bind="_query"
+                       @bind:event="oninput"
+                       placeholder="@UiText.Get("SearchRecipesPlaceholder")" />
+            </label>
+
+            @if (FilteredRecipes.Count == 0)
+            {
+                <p class="empty-state">@UiText.Get("NoRecipesAvailable")</p>
+            }
+            else
+            {
+                <div class="recipe-list">
+                    @foreach (var recipe in FilteredRecipes)
+                    {
+                        <article class="recipe-card">
+                            @if (_editDraft?.RowNumber == recipe.RowNumber)
+                            {
+                                <div class="recipe-edit-form">
+                                    <label class="form-field">
+                                        <span>@UiText.Get("RecipeNameLabel")</span>
+                                        <input @bind="_editDraft.Name"
+                                               placeholder="@UiText.Get("RecipeNamePlaceholder")" />
+                                    </label>
+
+                                    <label class="form-field">
+                                        <span>@UiText.Get("RecipeDescriptionLabel")</span>
+                                        <textarea @bind="_editDraft.Description"
+                                                  placeholder="@UiText.Get("RecipeDescriptionPlaceholder")"></textarea>
+                                    </label>
+
+                                    <fieldset class="tag-selector">
+                                        <legend>@UiText.Get("TagsLabel")</legend>
+                                        @foreach (var tag in _tags)
+                                        {
+                                            <label>
+                                                <input type="checkbox"
+                                                       checked="@_editDraft.Tags.Contains(tag.Id)"
+                                                       @onchange="eventArgs => SetTag(
+                                                           _editDraft,
+                                                           tag.Id,
+                                                           eventArgs.Value is true)" />
+                                                <span>@tag.DisplayName</span>
+                                            </label>
+                                        }
+                                        @if (_tags.Count == 0)
+                                        {
+                                            <span class="muted-copy">@UiText.Get("NoTags")</span>
+                                        }
+                                    </fieldset>
+
+                                    <div class="recipe-card-actions">
+                                        <button class="text-button"
+                                                type="button"
+                                                disabled="@_isSaving"
+                                                @onclick="SaveRecipeEditAsync">
+                                            @(_isSaving
+                                                ? UiText.Get("SavingLocalChanges")
+                                                : UiText.Get("SaveRecipe"))
+                                        </button>
+                                        <button class="text-button"
+                                                type="button"
+                                                disabled="@_isSaving"
+                                                @onclick="CancelRecipeEdit">
+                                            @UiText.Get("Cancel")
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="recipe-card-heading">
+                                    <h2>@recipe.Name</h2>
+                                    <button class="text-button"
+                                            type="button"
+                                            @onclick="() => BeginRecipeEdit(recipe)">
+                                        @UiText.Get("EditRecipe")
+                                    </button>
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(recipe.Description))
+                                {
+                                    <p>@recipe.Description</p>
+                                }
+                                @if (recipe.Tags.Count > 0)
+                                {
+                                    <ul class="tag-list" aria-label="@UiText.Get("TagsLabel")">
+                                        @foreach (var tag in recipe.Tags)
+                                        {
+                                            <li>@DisplayTag(tag)</li>
+                                        }
+                                    </ul>
+                                }
+                            }
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    }
+</main>
+
+@code {
+    private readonly List<RecipeItem> _recipes = [];
+    private readonly List<TagItem> _tags = [];
+    private readonly List<string> _errors = [];
+    private readonly List<RecipeDraft> _drafts = [new()];
+    private SpreadsheetSnapshot? _snapshot;
+    private string _query = string.Empty;
+    private string? _formMessage;
+    private bool _formHasError;
+    private bool _isSaving;
+    private RecipeEditDraft? _editDraft;
+
+    private IReadOnlyList<RecipeItem> FilteredRecipes =>
+        string.IsNullOrWhiteSpace(_query)
+            ? _recipes
+            : _recipes
+                .Where(recipe =>
+                    recipe.Name.Contains(_query, StringComparison.OrdinalIgnoreCase) ||
+                    recipe.Description.Contains(_query, StringComparison.OrdinalIgnoreCase) ||
+                    recipe.Tags.Any(tag => tag.Contains(
+                        _query,
+                        StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _snapshot = await Store.GetAsync();
+        ParseSnapshot();
+    }
+
+    private void AddDraft()
+    {
+        _drafts.Add(new RecipeDraft());
+    }
+
+    private void RemoveDraft(RecipeDraft draft)
+    {
+        _drafts.Remove(draft);
+    }
+
+    private static void SetTag(RecipeDraft draft, string tag, bool selected)
+    {
+        if (selected)
+        {
+            draft.Tags.Add(tag);
+        }
+        else
+        {
+            draft.Tags.Remove(tag);
+        }
+    }
+
+    private static void SetTag(RecipeEditDraft draft, string tag, bool selected)
+    {
+        if (selected)
+        {
+            draft.Tags.Add(tag);
+        }
+        else
+        {
+            draft.Tags.Remove(tag);
+        }
+    }
+
+    private void BeginRecipeEdit(RecipeItem recipe)
+    {
+        _editDraft = new RecipeEditDraft
+        {
+            RowNumber = recipe.RowNumber,
+            Name = recipe.Name,
+            Description = recipe.Description
+        };
+        _editDraft.Tags.UnionWith(recipe.Tags);
+        _formMessage = null;
+        _formHasError = false;
+    }
+
+    private void CancelRecipeEdit()
+    {
+        _editDraft = null;
+        _formMessage = null;
+        _formHasError = false;
+    }
+
+    private async Task SaveRecipeEditAsync()
+    {
+        if (_snapshot is null || _editDraft is null)
+        {
+            return;
+        }
+
+        var name = _editDraft.Name.Trim();
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            _formMessage = UiText.Get("RecipeNameRequired");
+            _formHasError = true;
+            return;
+        }
+
+        if (_recipes.Any(recipe =>
+                recipe.RowNumber != _editDraft.RowNumber &&
+                recipe.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            _formMessage = UiText.Get("RecipeNameAlreadyExists", name);
+            _formHasError = true;
+            return;
+        }
+
+        _isSaving = true;
+        _formMessage = null;
+        _formHasError = false;
+
+        try
+        {
+            _snapshot = MutationService.UpdateRow(
+                _snapshot,
+                SpreadsheetDefinition.Recipe,
+                _editDraft.RowNumber,
+                new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["name"] = name,
+                    ["description"] = _editDraft.Description.Trim(),
+                    ["tags"] = SerializeTags(_editDraft.Tags)
+                });
+            await Store.SetAsync(_snapshot);
+            ParseSnapshot();
+            _editDraft = null;
+            _formMessage = UiText.Get("RecipeUpdatedLocally", name);
+        }
+        catch (Exception)
+        {
+            _formMessage = UiText.Get("LocalRecipeUpdateFailed");
+            _formHasError = true;
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private async Task AddDraftsToLocalSnapshotAsync()
+    {
+        if (_snapshot is null)
+        {
+            return;
+        }
+
+        _isSaving = true;
+        _formMessage = null;
+        _formHasError = false;
+
+        try
+        {
+            var validationError = ValidateDrafts();
+            if (validationError is not null)
+            {
+                _formMessage = validationError;
+                _formHasError = true;
+                return;
+            }
+
+            var rows = _drafts
+                .Select(draft => (IReadOnlyDictionary<string, string>)
+                    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["name"] = draft.Name.Trim(),
+                        ["description"] = draft.Description.Trim(),
+                        ["tags"] = SerializeTags(draft.Tags)
+                    })
+                .ToList();
+
+            _snapshot = MutationService.AppendRows(
+                _snapshot,
+                SpreadsheetDefinition.Recipe,
+                rows);
+            await Store.SetAsync(_snapshot);
+            ParseSnapshot();
+            _drafts.Clear();
+            _drafts.Add(new RecipeDraft());
+            _formMessage = UiText.Get("RecipesAddedLocally", rows.Count);
+        }
+        catch (Exception)
+        {
+            _formMessage = UiText.Get("LocalChangesSaveFailed");
+            _formHasError = true;
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private string? ValidateDrafts()
+    {
+        if (_drafts.Any(draft => string.IsNullOrWhiteSpace(draft.Name)))
+        {
+            return UiText.Get("AllRecipeNamesRequired");
+        }
+
+        var existingNames = _recipes
+            .Select(recipe => recipe.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var draftNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var draft in _drafts)
+        {
+            var name = draft.Name.Trim();
+            if (existingNames.Contains(name) || !draftNames.Add(name))
+            {
+                return UiText.Get("RecipeNameAlreadyExists", name);
+            }
+        }
+
+        return null;
+    }
+
+    private void ParseSnapshot()
+    {
+        _recipes.Clear();
+        _errors.Clear();
+
+        if (_snapshot is null)
+        {
+            return;
+        }
+
+        var result = RecipeParser.Parse(_snapshot);
+        var tagResult = TagParser.Parse(_snapshot);
+        _recipes.AddRange(result.Recipes);
+        _errors.AddRange(result.Errors);
+        _tags.Clear();
+        _tags.AddRange(tagResult.Tags);
+    }
+
+    private string DisplayTag(string value)
+    {
+        var definition = _tags.FirstOrDefault(
+            tag => tag.Id.Equals(value, StringComparison.OrdinalIgnoreCase));
+        return definition?.DisplayName ?? value;
+    }
+
+    private string SerializeTags(IReadOnlySet<string> selectedTags)
+    {
+        var knownTagIds = _tags
+            .Select(tag => tag.Id)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var orderedTags = _tags
+            .Where(tag => selectedTags.Contains(tag.Id))
+            .Select(tag => tag.Id)
+            .Concat(selectedTags.Where(tag => !knownTagIds.Contains(tag)));
+
+        return string.Join(
+            SpreadsheetDefinition.Recipe.Columns
+                .Single(column => column.Name == "tags")
+                .ValueSeparator,
+            orderedTags);
+    }
+
+    private sealed class RecipeDraft
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public HashSet<string> Tags { get; } = new(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private sealed class RecipeEditDraft
+    {
+        public int RowNumber { get; init; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public HashSet<string> Tags { get; } = new(StringComparer.OrdinalIgnoreCase);
+    }
+}

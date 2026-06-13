@@ -33,6 +33,7 @@ jobs:
         run: |
           sed -i 's|<base href="/" />|<base href="/chishazi/" />|' publish/wwwroot/index.html
           rm -f publish/wwwroot/index.html.br publish/wwwroot/index.html.gz
+          cp publish/wwwroot/index.html publish/wwwroot/404.html
           touch publish/wwwroot/.nojekyll
 
       - name: Configure GitHub Pages
