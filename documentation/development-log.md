@@ -176,3 +176,17 @@
 - Removed the source repository link from the application footer.
 - Removed the raw worksheet count from the home status text and unified cached
   and freshly loaded states under one last-loaded timestamp message.
+- Added restrained, semantic emoji to primary navigation, page titles, major
+  actions, data counts, and key status messages.
+
+## 2026-06-15
+
+- Added Restaurant as an equal-level meal choice type with name, description,
+  shared Tag references, and free-text location fields.
+- Added Restaurant parsing, validation, batch creation, editing, browsing, and
+  search through `/data/restaurants`.
+- Added the parsed Restaurant count to the home synchronization module.
+- Added fixed-domain Amap URI search links that combine and encode Restaurant
+  names and locations, attempt native app launch, and retain web fallback.
+- Kept Restaurant changes inside the existing schema-neutral local mutation,
+  preview, and confirmed upload flow.

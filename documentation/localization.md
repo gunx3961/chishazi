@@ -35,6 +35,11 @@ Prefer language about dishes, choices, saving, and syncing. Avoid exposing
 implementation terms such as snapshot, cache, worksheet, cell, OAuth, scope,
 or remote conflict unless no clearer recovery instruction is possible.
 
+Use emoji selectively for primary navigation, page titles, major actions,
+counts, and key status messages. Keep form labels, detailed validation text,
+and row-level change details plain so the interface remains compact and
+readable.
+
 Formatted resources use zero-based placeholders:
 
 ```text
@@ -70,9 +75,9 @@ and reload the application so the matching satellite resource is loaded.
 
 ## Browser Startup Boundary
 
-The pre-Blazor HTML shell contains only the non-localized product name
-`Chishazi` and a graphical loading indicator. Runtime error controls are
-rendered by `App.razor` and therefore use the resource file.
+The pre-Blazor HTML shell contains only the Chinese product name and a
+graphical loading indicator. Runtime error controls are rendered by
+`App.razor` and therefore use the resource file.
 
 Google authorization JavaScript returns stable error codes. C# maps those codes
 to localized resource values before displaying them.

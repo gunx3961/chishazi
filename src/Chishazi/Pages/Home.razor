@@ -2,6 +2,7 @@
 @inject GoogleAuthorizationService Authorization
 @inject GoogleSheetsClient SheetsClient
 @inject RecipeSheetParser RecipeParser
+@inject RestaurantSheetParser RestaurantParser
 @inject TagSheetParser TagParser
 @inject SpreadsheetDiffService DiffService
 @inject SpreadsheetStore Store
@@ -175,6 +176,9 @@
                     <a class="data-total-link" href="data/recipes">
                         @UiText.Get("RecipesLoaded", _recipes.Count)
                     </a>
+                    <a class="data-total-link" href="data/restaurants">
+                        @UiText.Get("RestaurantsLoaded", _restaurants.Count)
+                    </a>
                     <a class="data-total-link" href="data/tags">
                         @UiText.Get("TagsLoaded", _tags.Count)
                     </a>
@@ -229,6 +233,7 @@
 
 @code {
     private readonly List<RecipeItem> _recipes = [];
+    private readonly List<RestaurantItem> _restaurants = [];
     private readonly List<TagItem> _tags = [];
     private readonly List<string> _rowErrors = [];
     private SpreadsheetSnapshot? _snapshot;
@@ -516,16 +521,22 @@
 
     private void ApplySnapshot(SpreadsheetSnapshot snapshot)
     {
-        var result = RecipeParser.Parse(snapshot);
+        var recipeResult = RecipeParser.Parse(snapshot);
+        var restaurantResult = RestaurantParser.Parse(snapshot);
         var tagResult = TagParser.Parse(snapshot);
 
         _snapshot = snapshot;
         _recipes.Clear();
-        _recipes.AddRange(result.Recipes);
+        _recipes.AddRange(recipeResult.Recipes);
+        _restaurants.Clear();
+        _restaurants.AddRange(restaurantResult.Restaurants);
         _tags.Clear();
         _tags.AddRange(tagResult.Tags);
         _rowErrors.Clear();
-        _rowErrors.AddRange(result.Errors);
+        _rowErrors.AddRange(
+            recipeResult.Errors
+                .Concat(restaurantResult.Errors)
+                .Distinct(StringComparer.Ordinal));
     }
 
     private void CancelPreview()

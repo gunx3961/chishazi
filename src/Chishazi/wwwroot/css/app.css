@@ -565,6 +565,18 @@ code {
     white-space: pre-wrap;
 }
 
+.restaurant-location {
+    font-weight: 700;
+}
+
+.map-link {
+    display: inline-block;
+    margin-top: 0.65rem;
+    color: #8f471f;
+    font-weight: 750;
+    text-underline-offset: 0.22rem;
+}
+
 .tag-list {
     display: flex;
     flex-wrap: wrap;

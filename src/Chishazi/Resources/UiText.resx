@@ -5,32 +5,33 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="AppTitle" xml:space="preserve"><value>吃啥子</value></data>
-  <data name="BrandName" xml:space="preserve"><value>吃啥子</value></data>
+  <data name="BrandName" xml:space="preserve"><value>🍜 吃啥子</value></data>
   <data name="PrimaryNavigationLabel" xml:space="preserve"><value>主导航</value></data>
-  <data name="NavTagline" xml:space="preserve"><value>今天吃啥子？</value></data>
+  <data name="NavTagline" xml:space="preserve"><value>🎲 今天吃啥子？</value></data>
   <data name="FooterPrivacy" xml:space="preserve"><value>你的菜单只会用你的谷歌账号打开。</value></data>
-  <data name="SetupRequired" xml:space="preserve"><value>先准备一下</value></data>
-  <data name="SetupTitle" xml:space="preserve"><value>连接你的菜单</value></data>
+  <data name="SetupRequired" xml:space="preserve"><value>🛠️ 先准备一下</value></data>
+  <data name="SetupTitle" xml:space="preserve"><value>🔗 连接你的菜单</value></data>
   <data name="SetupDescriptionBeforePath" xml:space="preserve"><value>把网页连接编号和表格编号填进</value></data>
   <data name="SetupDescriptionAfterPath" xml:space="preserve"><value>不要填写密码或登录凭证。</value></data>
-  <data name="OpenSetupGuide" xml:space="preserve"><value>看看怎么设置</value></data>
+  <data name="OpenSetupGuide" xml:space="preserve"><value>📖 看看怎么设置</value></data>
   <data name="SpreadsheetDataControlsLabel" xml:space="preserve"><value>菜单同步</value></data>
-  <data name="GoogleSheetsLabel" xml:space="preserve"><value>我的菜单</value></data>
-  <data name="RecipesLoaded" xml:space="preserve"><value>{0} 道菜</value></data>
-  <data name="ClearCache" xml:space="preserve"><value>清空本地数据</value></data>
-  <data name="Syncing" xml:space="preserve"><value>正在同步...</value></data>
-  <data name="AuthorizeAndPull" xml:space="preserve"><value>连接并载入菜单</value></data>
-  <data name="PullSpreadsheet" xml:space="preserve"><value>载入最新菜单</value></data>
-  <data name="PreviewUpload" xml:space="preserve"><value>看看准备保存什么</value></data>
-  <data name="ReviewLocalChanges" xml:space="preserve"><value>看看还没保存的改动</value></data>
-  <data name="DiscardLocalChanges" xml:space="preserve"><value>放弃这些改动</value></data>
-  <data name="LocalChangesPreviewLabel" xml:space="preserve"><value>待保存</value></data>
-  <data name="UploadPreviewLabel" xml:space="preserve"><value>保存前确认</value></data>
+  <data name="GoogleSheetsLabel" xml:space="preserve"><value>🍽️ 我的菜单</value></data>
+  <data name="RecipesLoaded" xml:space="preserve"><value>🍲 {0} 道菜</value></data>
+  <data name="RestaurantsLoaded" xml:space="preserve"><value>🏮 {0} 家馆子</value></data>
+  <data name="ClearCache" xml:space="preserve"><value>🧹 清空本地数据</value></data>
+  <data name="Syncing" xml:space="preserve"><value>🔄 正在同步...</value></data>
+  <data name="AuthorizeAndPull" xml:space="preserve"><value>🔗 连接并载入菜单</value></data>
+  <data name="PullSpreadsheet" xml:space="preserve"><value>🔄 载入最新菜单</value></data>
+  <data name="PreviewUpload" xml:space="preserve"><value>👀 看看准备保存什么</value></data>
+  <data name="ReviewLocalChanges" xml:space="preserve"><value>📝 看看还没保存的改动</value></data>
+  <data name="DiscardLocalChanges" xml:space="preserve"><value>🗑️ 放弃这些改动</value></data>
+  <data name="LocalChangesPreviewLabel" xml:space="preserve"><value>📝 待保存</value></data>
+  <data name="UploadPreviewLabel" xml:space="preserve"><value>👀 保存前确认</value></data>
   <data name="UploadChangesFound" xml:space="preserve"><value>新增 {0} 组数据，改动 {1} 条</value></data>
   <data name="WorksheetsToCreate" xml:space="preserve"><value>会新建这些分类</value></data>
-  <data name="NoUploadChanges" xml:space="preserve"><value>没有新改动，菜单已经是最新的。</value></data>
-  <data name="ConfirmUpload" xml:space="preserve"><value>保存 {0} 个新分类和 {1} 条改动</value></data>
-  <data name="Uploading" xml:space="preserve"><value>正在保存...</value></data>
+  <data name="NoUploadChanges" xml:space="preserve"><value>✨ 没有新改动，菜单已经是最新的。</value></data>
+  <data name="ConfirmUpload" xml:space="preserve"><value>🚀 保存 {0} 个新分类和 {1} 条改动</value></data>
+  <data name="Uploading" xml:space="preserve"><value>🚀 正在保存...</value></data>
   <data name="Cancel" xml:space="preserve"><value>算了</value></data>
   <data name="RowPosition" xml:space="preserve"><value>第 {0} 条</value></data>
   <data name="ColumnNumber" xml:space="preserve"><value>第 {0} 项</value></data>
@@ -42,28 +43,28 @@
   <data name="RemoteChangedSincePreview" xml:space="preserve"><value>菜单刚刚变过了。再看一遍准备保存的内容吧。</value></data>
   <data name="UploadTargetWorksheetChanged" xml:space="preserve"><value>“{0}”已经变过了。先载入最新菜单再试。</value></data>
   <data name="UploadTargetCellChanged" xml:space="preserve"><value>“{0}”第 {1} 条的“{2}”已经变过了。先载入最新菜单再决定保留哪一版。</value></data>
-  <data name="DiscardLocalChangesLabel" xml:space="preserve"><value>重新来过</value></data>
+  <data name="DiscardLocalChangesLabel" xml:space="preserve"><value>🗑️ 重新来过</value></data>
   <data name="DiscardLocalChangesTitle" xml:space="preserve"><value>真的不要这些改动了？</value></data>
   <data name="DiscardLocalChangesDescription" xml:space="preserve"><value>菜单会回到上次载入时的样子，已经保存到谷歌表格里的内容不会受影响。</value></data>
-  <data name="ConfirmDiscardLocalChanges" xml:space="preserve"><value>不要了，恢复原样</value></data>
+  <data name="ConfirmDiscardLocalChanges" xml:space="preserve"><value>🗑️ 不要了，恢复原样</value></data>
   <data name="NoBaselineToRestore" xml:space="preserve"><value>还没有可以恢复的版本。先载入一次菜单吧。</value></data>
-  <data name="AttentionTitle" xml:space="preserve"><value>这里卡了一下</value></data>
+  <data name="AttentionTitle" xml:space="preserve"><value>⚠️ 这里卡了一下</value></data>
   <data name="RowValidationIssues" xml:space="preserve"><value>有 {0} 条内容需要看看</value></data>
-  <data name="RecipeListTitle" xml:space="preserve"><value>菜谱</value></data>
+  <data name="RecipeListTitle" xml:space="preserve"><value>🍲 菜谱</value></data>
   <data name="NoRecipesAvailable" xml:space="preserve"><value>菜单还是空的，先加几道菜吧。</value></data>
-  <data name="TagsLabel" xml:space="preserve"><value>标签</value></data>
-  <data name="DataBrowserLabel" xml:space="preserve"><value>菜单仓库</value></data>
-  <data name="AllDataTitle" xml:space="preserve"><value>全部数据</value></data>
+  <data name="TagsLabel" xml:space="preserve"><value>🏷️ 标签</value></data>
+  <data name="DataBrowserLabel" xml:space="preserve"><value>🗃️ 菜单仓库</value></data>
+  <data name="AllDataTitle" xml:space="preserve"><value>🗃️ 全部数据</value></data>
   <data name="NoCachedDataForBrowser" xml:space="preserve"><value>这里还没有菜单。先回首页载入一次吧。</value></data>
-  <data name="SearchAllData" xml:space="preserve"><value>搜全部内容</value></data>
+  <data name="SearchAllData" xml:space="preserve"><value>🔍 搜全部内容</value></data>
   <data name="SearchDataPlaceholder" xml:space="preserve"><value>输入想找的内容</value></data>
   <data name="RowsFound" xml:space="preserve"><value>找到 {0} 条</value></data>
   <data name="NoDataMatches" xml:space="preserve"><value>没找到，再换个词试试。</value></data>
-  <data name="SearchRecipes" xml:space="preserve"><value>搜菜谱</value></data>
+  <data name="SearchRecipes" xml:space="preserve"><value>🔍 搜菜谱</value></data>
   <data name="SearchRecipesPlaceholder" xml:space="preserve"><value>搜菜名、简介或标签</value></data>
-  <data name="LocalChangesLabel" xml:space="preserve"><value>先记在这里</value></data>
-  <data name="AddRecipesTitle" xml:space="preserve"><value>加点新菜</value></data>
-  <data name="AddAnotherRecipe" xml:space="preserve"><value>再来一道</value></data>
+  <data name="LocalChangesLabel" xml:space="preserve"><value>📝 先记在这里</value></data>
+  <data name="AddRecipesTitle" xml:space="preserve"><value>➕ 加点新菜</value></data>
+  <data name="AddAnotherRecipe" xml:space="preserve"><value>➕ 再来一道</value></data>
   <data name="RecipeDraftNumber" xml:space="preserve"><value>第 {0} 道</value></data>
   <data name="RecipeNameLabel" xml:space="preserve"><value>菜名</value></data>
   <data name="RecipeNamePlaceholder" xml:space="preserve"><value>这道菜叫什么？</value></data>
@@ -71,40 +72,70 @@
   <data name="RecipeDescriptionPlaceholder" xml:space="preserve"><value>想补充点什么都行</value></data>
   <data name="RemoveRecipeDraft" xml:space="preserve"><value>这道先不加</value></data>
   <data name="SavingLocalChanges" xml:space="preserve"><value>正在记下...</value></data>
-  <data name="AddRecipesToLocalChanges" xml:space="preserve"><value>先记下这 {0} 道菜</value></data>
-  <data name="RecipesAddedLocally" xml:space="preserve"><value>记下 {0} 道新菜了。回首页确认后就能保存。</value></data>
+  <data name="AddRecipesToLocalChanges" xml:space="preserve"><value>📝 先记下这 {0} 道菜</value></data>
+  <data name="RecipesAddedLocally" xml:space="preserve"><value>✅ 记下 {0} 道新菜了。回首页确认后就能保存。</value></data>
   <data name="LocalChangesSaveFailed" xml:space="preserve"><value>这几道菜没记下来，再试一次吧。</value></data>
   <data name="AllRecipeNamesRequired" xml:space="preserve"><value>每道菜都得有个名字。</value></data>
   <data name="RecipeNameAlreadyExists" xml:space="preserve"><value>已经有一道“{0}”了，换个名字吧。</value></data>
-  <data name="AvailableRecipesTitle" xml:space="preserve"><value>我的菜谱</value></data>
-  <data name="EditRecipe" xml:space="preserve"><value>改一改</value></data>
-  <data name="SaveRecipe" xml:space="preserve"><value>记下修改</value></data>
+  <data name="AvailableRecipesTitle" xml:space="preserve"><value>🍲 我的菜谱</value></data>
+  <data name="EditRecipe" xml:space="preserve"><value>✏️ 改一改</value></data>
+  <data name="SaveRecipe" xml:space="preserve"><value>💾 记下修改</value></data>
   <data name="RecipeNameRequired" xml:space="preserve"><value>菜名不能空着。</value></data>
-  <data name="RecipeUpdatedLocally" xml:space="preserve"><value>“{0}”改好了。回首页确认后就能保存。</value></data>
+  <data name="RecipeUpdatedLocally" xml:space="preserve"><value>✅ “{0}”改好了。回首页确认后就能保存。</value></data>
   <data name="LocalRecipeUpdateFailed" xml:space="preserve"><value>这次没改成功，再试一次吧。</value></data>
-  <data name="ManageTags" xml:space="preserve"><value>整理标签</value></data>
+  <data name="RestaurantListTitle" xml:space="preserve"><value>🏮 馆子</value></data>
+  <data name="NoRestaurantsAvailable" xml:space="preserve"><value>还没收藏馆子，先记一家吧。</value></data>
+  <data name="SearchRestaurants" xml:space="preserve"><value>🔍 搜馆子</value></data>
+  <data name="SearchRestaurantsPlaceholder" xml:space="preserve"><value>搜名字、简介、位置或标签</value></data>
+  <data name="AddRestaurantsTitle" xml:space="preserve"><value>➕ 记几家馆子</value></data>
+  <data name="AddAnotherRestaurant" xml:space="preserve"><value>➕ 再来一家</value></data>
+  <data name="RestaurantDraftNumber" xml:space="preserve"><value>第 {0} 家</value></data>
+  <data name="RestaurantNameLabel" xml:space="preserve"><value>馆子名</value></data>
+  <data name="RestaurantNamePlaceholder" xml:space="preserve"><value>这家叫什么？</value></data>
+  <data name="RestaurantDescriptionLabel" xml:space="preserve"><value>随手记</value></data>
+  <data name="RestaurantDescriptionPlaceholder" xml:space="preserve"><value>招牌菜、口味或其他提醒</value></data>
+  <data name="RestaurantLocationLabel" xml:space="preserve"><value>位置</value></data>
+  <data name="RestaurantLocationPlaceholder" xml:space="preserve"><value>尽量写完整，找起来更准</value></data>
+  <data name="RemoveRestaurantDraft" xml:space="preserve"><value>这家先不加</value></data>
+  <data name="AddRestaurantsToLocalChanges" xml:space="preserve"><value>📝 先记下这 {0} 家</value></data>
+  <data name="RestaurantsAddedLocally" xml:space="preserve"><value>✅ 记下 {0} 家新馆子了。回首页确认后就能保存。</value></data>
+  <data name="LocalRestaurantChangesSaveFailed" xml:space="preserve"><value>这几家没记下来，再试一次吧。</value></data>
+  <data name="AllRestaurantNamesRequired" xml:space="preserve"><value>每家馆子都得有个名字。</value></data>
+  <data name="RestaurantNameAlreadyExists" xml:space="preserve"><value>已经有一家“{0}”了，换个名字吧。</value></data>
+  <data name="AvailableRestaurantsTitle" xml:space="preserve"><value>🏮 我的馆子</value></data>
+  <data name="EditRestaurant" xml:space="preserve"><value>✏️ 改一改</value></data>
+  <data name="SaveRestaurant" xml:space="preserve"><value>💾 记下修改</value></data>
+  <data name="RestaurantNameRequired" xml:space="preserve"><value>馆子名不能空着。</value></data>
+  <data name="RestaurantUpdatedLocally" xml:space="preserve"><value>✅ “{0}”改好了。回首页确认后就能保存。</value></data>
+  <data name="LocalRestaurantUpdateFailed" xml:space="preserve"><value>这次没改成功，再试一次吧。</value></data>
+  <data name="OpenRestaurantInAmap" xml:space="preserve"><value>🗺️ 去高德看看</value></data>
+  <data name="RestaurantRowNameRequired" xml:space="preserve"><value>馆子第 {0} 条没有名字，先补上再来。</value></data>
+  <data name="DuplicateRestaurantName" xml:space="preserve"><value>“{0}”出现了不止一次，留一个就好。</value></data>
+  <data name="UnknownRestaurantTag" xml:space="preserve"><value>馆子第 {0} 条用了找不到的标签“{1}”。</value></data>
+  <data name="ViewRestaurants" xml:space="preserve"><value>🏮 看看馆子</value></data>
+  <data name="ManageTags" xml:space="preserve"><value>🏷️ 整理标签</value></data>
   <data name="NoTags" xml:space="preserve"><value>还没有标签，先去加一个吧。</value></data>
-  <data name="TagListTitle" xml:space="preserve"><value>标签</value></data>
-  <data name="TagsLoaded" xml:space="preserve"><value>{0} 个标签</value></data>
-  <data name="ReturnToRecipes" xml:space="preserve"><value>回到菜谱</value></data>
-  <data name="AddTagsTitle" xml:space="preserve"><value>加点标签</value></data>
-  <data name="AddAnotherTag" xml:space="preserve"><value>再来一个</value></data>
+  <data name="TagListTitle" xml:space="preserve"><value>🏷️ 标签</value></data>
+  <data name="TagsLoaded" xml:space="preserve"><value>🏷️ {0} 个标签</value></data>
+  <data name="ReturnToRecipes" xml:space="preserve"><value>🍲 回到菜谱</value></data>
+  <data name="AddTagsTitle" xml:space="preserve"><value>➕ 加点标签</value></data>
+  <data name="AddAnotherTag" xml:space="preserve"><value>➕ 再来一个</value></data>
   <data name="TagDraftNumber" xml:space="preserve"><value>标签 {0}</value></data>
   <data name="TagDisplayNameLabel" xml:space="preserve"><value>标签名</value></data>
   <data name="TagDisplayNamePlaceholder" xml:space="preserve"><value>比如：下饭、清淡、快手</value></data>
   <data name="RemoveTagDraft" xml:space="preserve"><value>这个先不要</value></data>
-  <data name="AddTagsToLocalChanges" xml:space="preserve"><value>先记下这 {0} 个标签</value></data>
-  <data name="TagsAddedLocally" xml:space="preserve"><value>记下 {0} 个新标签了。回首页确认后就能保存。</value></data>
+  <data name="AddTagsToLocalChanges" xml:space="preserve"><value>📝 先记下这 {0} 个标签</value></data>
+  <data name="TagsAddedLocally" xml:space="preserve"><value>✅ 记下 {0} 个新标签了。回首页确认后就能保存。</value></data>
   <data name="LocalTagChangesSaveFailed" xml:space="preserve"><value>标签没记下来，再试一次吧。</value></data>
   <data name="AllTagDisplayNamesRequired" xml:space="preserve"><value>每个标签都得有个名字。</value></data>
   <data name="TagDisplayNameAlreadyExists" xml:space="preserve"><value>“{0}”已经有了，换一个吧。</value></data>
-  <data name="AvailableTagsTitle" xml:space="preserve"><value>现有标签</value></data>
-  <data name="SaveTagDisplayName" xml:space="preserve"><value>记下修改</value></data>
+  <data name="AvailableTagsTitle" xml:space="preserve"><value>🏷️ 现有标签</value></data>
+  <data name="SaveTagDisplayName" xml:space="preserve"><value>💾 记下修改</value></data>
   <data name="TagDisplayNameRequired" xml:space="preserve"><value>标签名不能空着。</value></data>
-  <data name="TagDisplayNameUpdatedLocally" xml:space="preserve"><value>“{0}”改好了。</value></data>
-  <data name="NoCachedData" xml:space="preserve"><value>还没载入菜单，连接一次就可以开始了。</value></data>
-  <data name="MenuLoadedStatus" xml:space="preserve"><value>上次载入于 {0}。</value></data>
-  <data name="PendingLocalChangesStatus" xml:space="preserve"><value>还有 {0} 条改动没保存。菜单载入于 {1}。</value></data>
+  <data name="TagDisplayNameUpdatedLocally" xml:space="preserve"><value>✅ “{0}”改好了。</value></data>
+  <data name="NoCachedData" xml:space="preserve"><value>👋 还没载入菜单，连接一次就可以开始了。</value></data>
+  <data name="MenuLoadedStatus" xml:space="preserve"><value>🕒 上次载入于 {0}。</value></data>
+  <data name="PendingLocalChangesStatus" xml:space="preserve"><value>📝 还有 {0} 条改动没保存。菜单载入于 {1}。</value></data>
   <data name="PullBlockedByLocalChanges" xml:space="preserve"><value>还有改动没处理。先保存或放弃它们，再载入最新菜单。</value></data>
   <data name="CacheReadFailed" xml:space="preserve"><value>本地菜单没打开，不过还是可以重新载入。</value></data>
   <data name="CacheWriteFailed" xml:space="preserve"><value>菜单载入了，但没能留在本机。下次打开时需要再载入一次。</value></data>
@@ -134,10 +165,10 @@
   <data name="WorksheetRenamedRemotely" xml:space="preserve"><value>“{1}”已经改名为“{2}”。先载入最新菜单。</value></data>
   <data name="WorksheetMissingLocally" xml:space="preserve"><value>谷歌表格里多了“{0}”。先载入最新菜单。</value></data>
   <data name="FormulaOverwriteBlocked" xml:space="preserve"><value>“{0}”第 {1} 条的第 {2} 项由表格自动计算，不能直接覆盖。请先去谷歌表格处理。</value></data>
-  <data name="NotFoundCode" xml:space="preserve"><value>走错路了</value></data>
+  <data name="NotFoundCode" xml:space="preserve"><value>🧭 走错路了</value></data>
   <data name="NotFoundTitle" xml:space="preserve"><value>这里什么都没有</value></data>
   <data name="NotFoundDescription" xml:space="preserve"><value>这个页面可能搬家了，回首页继续选菜吧。</value></data>
-  <data name="ReturnHome" xml:space="preserve"><value>回首页</value></data>
+  <data name="ReturnHome" xml:space="preserve"><value>🏠 回首页</value></data>
   <data name="UnhandledError" xml:space="preserve"><value>页面刚才卡住了。</value></data>
   <data name="Reload" xml:space="preserve"><value>重新来一次</value></data>
   <data name="Close" xml:space="preserve"><value>关掉</value></data>

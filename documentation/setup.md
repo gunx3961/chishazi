@@ -33,6 +33,21 @@ fe29d7e50e7d48d78f2d649f98c97e33,Breakfast
 6c0d3d2e27cc4da185a612a1f97be622,Dinner
 ```
 
+The current `Restaurant` contract uses this header row:
+
+```text
+name,description,tags,location
+```
+
+Example row:
+
+```text
+Noodle House,Late-night noodles,"6c0d3d2e27cc4da185a612a1f97be622",Shanghai Xuhui District
+```
+
+Restaurant locations are plain text. More complete place text produces a more
+precise Amap search. No Amap API key is required for the generated URI links.
+
 The application generates and manages Tag IDs. The Tags route exposes only
 display names. The worksheet and header row do not need to be created manually.
 
@@ -136,10 +151,13 @@ the Google authorization flow with the configured test account.
 - IndexedDB and cookies contain no access token.
 - Rows without a recipe name are reported and skipped.
 - Recipe tag references missing from the Tag worksheet are reported.
+- Restaurant tag references missing from the Tag worksheet are reported.
 - The Tags route can batch-add Tags and rename their display names. Generated
   IDs are not shown or edited.
 - The Recipe route can add multiple recipes to the local working snapshot in
   one action.
+- The Restaurant route can add and edit multiple restaurants, search location
+  text, and open a best-effort Amap app or web search.
 - Local additions from any type route accumulate in the same working snapshot.
 - Pull is blocked while local changes are pending.
 - **Review local changes** compares the working copy with the last synchronized

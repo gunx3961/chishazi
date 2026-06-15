@@ -145,6 +145,37 @@ public sealed class SpreadsheetMutationServiceTests
     }
 
     [Fact]
+    public void UpdateRow_ChangesRestaurantFieldsAndPreservesUnknownColumns()
+    {
+        var snapshot = CreateSnapshot(
+            """
+            [
+              ["name", "extra", "location", "description", "tags"],
+              ["Old place", "keep", "Old location", "Old note", "tag-old"]
+            ]
+            """,
+            "Restaurant");
+
+        var updated = _service.UpdateRow(
+            snapshot,
+            SpreadsheetDefinition.Restaurant,
+            2,
+            new Dictionary<string, string>
+            {
+                ["name"] = "New place",
+                ["description"] = "New note",
+                ["tags"] = "tag-new",
+                ["location"] = "New location"
+            });
+
+        Assert.Equal("New place", updated.Worksheets[0].Values[1][0].GetString());
+        Assert.Equal("keep", updated.Worksheets[0].Values[1][1].GetString());
+        Assert.Equal("New location", updated.Worksheets[0].Values[1][2].GetString());
+        Assert.Equal("New note", updated.Worksheets[0].Values[1][3].GetString());
+        Assert.Equal("tag-new", updated.Worksheets[0].Values[1][4].GetString());
+    }
+
+    [Fact]
     public void AppendRows_RefreshesEmptyTemporaryHeaders()
     {
         var snapshot = CreateSnapshot(

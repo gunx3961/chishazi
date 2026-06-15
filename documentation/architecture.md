@@ -1,6 +1,6 @@
 # Architecture and Feasibility
 
-Last updated: 2026-06-12
+Last updated: 2026-06-15
 
 ## Product Purpose
 
@@ -8,8 +8,8 @@ Chishazi is a personal random meal decision application. Its purpose is to
 help choose what to eat from privately maintained options. It is not a diet
 assessment system and does not evaluate whether a meal is healthy.
 
-The first business data contract is a Recipe worksheet used to display the
-owner's available meal options.
+Recipe and Restaurant are equal-level business data contracts used to display
+the owner's available meal options.
 
 Minimalism is a primary product principle. User workflows should expose only
 information and controls needed for the current decision task. Internal
@@ -237,8 +237,8 @@ that baseline, also without contacting Google. Upload preview remains a
 separate operation because it must fetch current remote values and formulas
 before write confirmation.
 
-Recipe creation is the first consumer of this mechanism. The route supports
-multiple drafts in one action and serializes Tag references using the separator
+Recipe and Restaurant creation consume this mechanism. Both routes support
+multiple drafts in one action and serialize Tag references using the separator
 declared by the `tags` column definition.
 
 ## Sheet Contract
@@ -254,6 +254,9 @@ columns, types, and validation flags.
 | `description` | No | Text |
 | `tags` | No | Comma-separated controlled text |
 
+Restaurant adds one optional `location` text column. It is stored as entered
+and combined with the Restaurant name only when building an Amap search URI.
+
 The `Tag` worksheet is the data-source-backed controlled-value catalog:
 
 | Header | Required | Type |
@@ -261,9 +264,24 @@ The `Tag` worksheet is the data-source-backed controlled-value catalog:
 | `id` | Yes | Automatically generated opaque identifier |
 | `displayName` | Yes | User-managed display text |
 
-Recipe rows reference `Tag.id`. The application generates IDs when Tags are
-created, preserves them when display names change, and never exposes them in
-the Tag management interface. All Tags are available to Recipe drafts.
+Recipe and Restaurant rows reference `Tag.id`. The application generates IDs
+when Tags are created, preserves them when display names change, and never
+exposes them in the Tag management interface. All Tags are available to both
+types of draft.
+
+## Map Integration
+
+`AmapUriBuilder` creates links to the fixed
+`https://uri.amap.com/search` endpoint. It combines the Restaurant name and
+free-text location, URL-encodes the complete keyword, requests map view, and
+sets `callnative=1`.
+
+On a supported mobile browser with Amap installed, the URI service can attempt
+to open the native application. Otherwise it falls back to Amap's web
+experience. Native application launch is therefore best-effort and depends on
+the browser, operating system, and installed applications. The application
+does not call a geocoding API and does not require an Amap API key for this URI
+link.
 
 The first row contains headers. The batch values request uses
 `UNFORMATTED_VALUE` so the cached snapshot remains independent of display
@@ -306,11 +324,16 @@ than every spreadsheet presentation property.
   batch row additions.
 - `SpreadsheetDefinition` owns worksheet-level business contracts.
 - `RecipeSheetParser` applies the Recipe definition to a snapshot.
+- `RestaurantSheetParser` applies the Restaurant definition to a snapshot.
 - `TagSheetParser` applies the Tag definition and validates required values and
   unique IDs.
+- `AmapUriBuilder` owns safe construction of fixed-domain Restaurant search
+  links.
 - `Home.razor` owns synchronization, upload preview, and defined-type counts.
 - `DataBrowser.razor` owns global raw worksheet browsing and search.
 - `Recipes.razor` owns Recipe browsing, search, and batch creation.
+- `Restaurants.razor` owns Restaurant browsing, search, batch creation, editing,
+  and map links.
 - `Tags.razor` owns Tag creation and display-name editing while generating and
   preserving internal IDs.
 - `google-auth.js` is the only direct caller of Google Identity Services.
@@ -331,7 +354,8 @@ than every spreadsheet presentation property.
   GitHub Pages route access starts Blazor routing.
 - A `.nojekyll` file is included in the published artifact so `_framework`
   assets are served.
-- Application browsing routes are `/data`, `/data/recipes`, and `/data/tags`.
+- Application browsing routes are `/data`, `/data/recipes`,
+  `/data/restaurants`, and `/data/tags`.
 
 ## Rejected Designs
 
@@ -355,3 +379,5 @@ than every spreadsheet presentation property.
 - [Google Sheets API values.batchGet](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/batchGet)
 - [Google Sheets API spreadsheets.batchUpdate](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate)
 - [Google Sheets API UpdateCellsRequest](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request#UpdateCellsRequest)
+- [Amap URI API overview](https://lbs.amap.com/api/uri-api/summary)
+- [Amap URI search](https://lbs.amap.com/api/uri-api/guide/search/search)

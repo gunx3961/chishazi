@@ -31,6 +31,18 @@ public static class SpreadsheetDefinition
                 MultipleValues: true)
         ]);
 
+    public static WorksheetDefinition Restaurant { get; } = new(
+        "Restaurant",
+        [
+            new("name", WorksheetColumnType.Text, Required: true),
+            new("description", WorksheetColumnType.Text),
+            new(
+                "tags",
+                WorksheetColumnType.Text,
+                MultipleValues: true),
+            new("location", WorksheetColumnType.Text)
+        ]);
+
     public static WorksheetDefinition Tag { get; } = new(
         "Tag",
         [
@@ -39,5 +51,5 @@ public static class SpreadsheetDefinition
         ]);
 
     public static IReadOnlyList<WorksheetDefinition> Worksheets { get; } =
-        [Recipe, Tag];
+        [Recipe, Restaurant, Tag];
 }

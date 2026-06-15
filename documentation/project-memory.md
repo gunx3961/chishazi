@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-06-12
+Last updated: 2026-06-15
 
 This file records durable facts that future implementation sessions must retain.
 It is not a backlog.
@@ -74,10 +74,14 @@ It is not a backlog.
 - Worksheet definitions live in
   `src/Chishazi/DataDefinitions/SpreadsheetDefinition.cs`.
 - `WorksheetDefinition` is the largest contract unit.
-- Current defined worksheets: `Recipe` and `Tag`
+- Current defined worksheets: `Recipe`, `Restaurant`, and `Tag`
 - Required header: `name`
-- Optional headers: `description` and `tags`
-- The Recipe `tags` cell uses comma-separated references to `Tag.id`.
+- Recipe optional headers: `description` and `tags`
+- Restaurant optional headers: `description`, `tags`, and `location`
+- Recipe and Restaurant `tags` cells use comma-separated references to
+  `Tag.id`.
+- Restaurant `location` is free text used with the Restaurant name for Amap
+  URI search.
 - Tag rows contain only `id` and `displayName`.
 - Tag IDs are opaque, automatically generated, hidden from the user, and
   preserved when display names change.
@@ -87,10 +91,13 @@ It is not a backlog.
   selectable controlled values.
 - Invalid rows are skipped and surfaced as validation messages.
 - The synchronization module lists defined data types and their parsed counts.
-- Recipe and Tag are defined types linking to `/data/recipes` and `/data/tags`.
+- Recipe, Restaurant, and Tag are defined types linking to `/data/recipes`,
+  `/data/restaurants`, and `/data/tags`.
 - `/data` provides global raw worksheet browsing and simple text search.
 - `/data/recipes` provides Recipe browsing, search, controlled tag selection,
   multi-Recipe creation, and local editing of existing Recipes.
+- `/data/restaurants` provides Restaurant browsing, search, controlled tag
+  selection, batch creation, local editing, and Amap search links.
 - `/data/tags` provides Tag creation and display-name editing.
 
 ## Durable Decisions
@@ -127,6 +134,10 @@ It is not a backlog.
   application. They must not be hard-coded in source.
 - Avoid adding user-visible fields or states before a concrete requirement
   needs them.
+- Store Restaurant locations as free text. Do not add coordinates or POI IDs
+  until exact-place selection is required.
+- Build Restaurant map links only against the fixed Amap URI search endpoint.
+  Native app launch is best-effort and web fallback is expected.
 - Upload intent is derived only from the working snapshot compared with the
   synchronized baseline.
 - Fresh remote data is used only to detect conflicts on intended upload targets.
