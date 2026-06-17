@@ -278,9 +278,10 @@ types of draft.
 - web fallback search using `https://uri.amap.com/search`
 
 `amap-links.js` selects the Android or iOS scheme from the browser user agent
-when the user activates the map control. If the page does not hide shortly
-after the scheme navigation, the script falls back to the web URI. Desktop
-browsers always use the web URI. Native application launch is therefore still
+when the user activates the map control. If the page does not hide or blur
+shortly after the scheme navigation, the script falls back to the web URI in a
+new window so the application page is not replaced. Desktop browsers always
+use the web URI in a new window. Native application launch is therefore still
 best-effort and depends on the browser, operating system, and installed
 applications. The application does not call a geocoding API and does not
 require an Amap API key for this URI link.

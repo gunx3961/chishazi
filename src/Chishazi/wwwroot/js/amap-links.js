@@ -10,19 +10,29 @@ window.chishaziAmap = {
       return;
     }
 
-    let appOpened = false;
-    const markAppOpened = () => {
-      appOpened = true;
+    let leftPage = false;
+    const markLeftPage = () => {
+      leftPage = true;
+    };
+    const markHidden = () => {
+      if (document.hidden) {
+        markLeftPage();
+      }
     };
 
-    window.addEventListener("pagehide", markAppOpened, { once: true });
-    document.addEventListener("visibilitychange", markAppOpened, { once: true });
+    window.addEventListener("blur", markLeftPage, { once: true });
+    window.addEventListener("pagehide", markLeftPage, { once: true });
+    document.addEventListener("visibilitychange", markHidden, { once: true });
 
     window.location.href = targetUrl;
 
     window.setTimeout(() => {
-      if (!appOpened) {
-        window.location.href = webUrl;
+      window.removeEventListener("blur", markLeftPage);
+      window.removeEventListener("pagehide", markLeftPage);
+      document.removeEventListener("visibilitychange", markHidden);
+
+      if (!leftPage) {
+        window.open(webUrl, "_blank", "noopener,noreferrer");
       }
     }, 900);
   }

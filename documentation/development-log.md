@@ -201,3 +201,6 @@
   dense editable Tag cards.
 - Tightened small-screen Recipe and Restaurant entry forms by reducing nested
   spacing, input height, textarea height, and Tag chip padding.
+- Changed the Amap web fallback to open in a new window and treat mobile page
+  blur as a successful application handoff, preserving the current application
+  page after map attempts.
