@@ -5,24 +5,30 @@ namespace Chishazi.Tests;
 public sealed class AmapUriBuilderTests
 {
     [Fact]
-    public void BuildRestaurantSearch_EncodesNameAndLocation()
+    public void BuildRestaurantSearch_EncodesNameOnly()
     {
-        var uri = AmapUriBuilder.BuildRestaurantSearch(
-            "Tea & Rice",
-            "Shanghai / Xuhui");
+        var uri = AmapUriBuilder.BuildRestaurantSearch("Tea & Rice");
 
         Assert.Equal(
             "https://uri.amap.com/search" +
-            "?keyword=Tea%20%26%20Rice%20Shanghai%20%2F%20Xuhui" +
+            "?keyword=Tea%20%26%20Rice" +
             "&view=map&callnative=1&src=chishazi",
             uri);
     }
 
     [Fact]
-    public void BuildRestaurantSearch_OmitsWhitespaceOnlyLocation()
+    public void BuildDirectPoiSearch_EncodesPlatformSpecificUrls()
     {
-        var uri = AmapUriBuilder.BuildRestaurantSearch("Noodle House", "  ");
+        var androidUri = AmapUriBuilder.BuildAndroidPoiSearch("Tea & Rice");
+        var iosUri = AmapUriBuilder.BuildIosPoiSearch("Tea & Rice");
 
-        Assert.Contains("keyword=Noodle%20House&", uri, StringComparison.Ordinal);
+        Assert.Equal(
+            "androidamap://poi?sourceApplication=chishazi" +
+            "&keywords=Tea%20%26%20Rice&dev=0",
+            androidUri);
+        Assert.Equal(
+            "iosamap://poi?sourceApplication=chishazi" +
+            "&name=Tea%20%26%20Rice&dev=0",
+            iosUri);
     }
 }

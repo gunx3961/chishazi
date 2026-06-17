@@ -190,3 +190,14 @@
   names and locations, attempt native app launch, and retain web fallback.
 - Kept Restaurant changes inside the existing schema-neutral local mutation,
   preview, and confirmed upload flow.
+
+## 2026-06-17
+
+- Changed Restaurant map links to search by Restaurant name only, leaving
+  location as local note and browsing-search text.
+- Added platform-specific Amap application scheme navigation for Android and
+  iOS with the web URI retained as fallback.
+- Made existing Tag editing more compact by replacing full-width edit rows with
+  dense editable Tag cards.
+- Tightened small-screen Recipe and Restaurant entry forms by reducing nested
+  spacing, input height, textarea height, and Tag chip padding.

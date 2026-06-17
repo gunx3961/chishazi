@@ -1,6 +1,6 @@
 # Architecture and Feasibility
 
-Last updated: 2026-06-15
+Last updated: 2026-06-17
 
 ## Product Purpose
 
@@ -255,7 +255,7 @@ columns, types, and validation flags.
 | `tags` | No | Comma-separated controlled text |
 
 Restaurant adds one optional `location` text column. It is stored as entered
-and combined with the Restaurant name only when building an Amap search URI.
+and used for local browsing search. Map links search only the Restaurant name.
 
 The `Tag` worksheet is the data-source-backed controlled-value catalog:
 
@@ -271,17 +271,19 @@ types of draft.
 
 ## Map Integration
 
-`AmapUriBuilder` creates links to the fixed
-`https://uri.amap.com/search` endpoint. It combines the Restaurant name and
-free-text location, URL-encodes the complete keyword, requests map view, and
-sets `callnative=1`.
+`AmapUriBuilder` creates three fixed-shape links from the Restaurant name:
 
-On a supported mobile browser with Amap installed, the URI service can attempt
-to open the native application. Otherwise it falls back to Amap's web
-experience. Native application launch is therefore best-effort and depends on
-the browser, operating system, and installed applications. The application
-does not call a geocoding API and does not require an Amap API key for this URI
-link.
+- Android direct application search using `androidamap://poi`
+- iOS direct application search using `iosamap://poi`
+- web fallback search using `https://uri.amap.com/search`
+
+`amap-links.js` selects the Android or iOS scheme from the browser user agent
+when the user activates the map control. If the page does not hide shortly
+after the scheme navigation, the script falls back to the web URI. Desktop
+browsers always use the web URI. Native application launch is therefore still
+best-effort and depends on the browser, operating system, and installed
+applications. The application does not call a geocoding API and does not
+require an Amap API key for this URI link.
 
 The first row contains headers. The batch values request uses
 `UNFORMATTED_VALUE` so the cached snapshot remains independent of display
@@ -327,8 +329,9 @@ than every spreadsheet presentation property.
 - `RestaurantSheetParser` applies the Restaurant definition to a snapshot.
 - `TagSheetParser` applies the Tag definition and validates required values and
   unique IDs.
-- `AmapUriBuilder` owns safe construction of fixed-domain Restaurant search
-  links.
+- `AmapUriBuilder` owns safe construction of Restaurant search links.
+- `amap-links.js` owns platform selection, direct application scheme
+  navigation, and web fallback for Restaurant map controls.
 - `Home.razor` owns synchronization, upload preview, and defined-type counts.
 - `DataBrowser.razor` owns global raw worksheet browsing and search.
 - `Recipes.razor` owns Recipe browsing, search, and batch creation.

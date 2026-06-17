@@ -3,6 +3,7 @@
 @inject RestaurantSheetParser RestaurantParser
 @inject TagSheetParser TagParser
 @inject SpreadsheetMutationService MutationService
+@inject IJSRuntime JsRuntime
 
 <PageTitle>@UiText.Get("RestaurantListTitle")</PageTitle>
 
@@ -229,15 +230,12 @@
                                 @if (!string.IsNullOrWhiteSpace(restaurant.Location))
                                 {
                                     <p class="restaurant-location">@restaurant.Location</p>
-                                    <a class="map-link"
-                                       href="@AmapUriBuilder.BuildRestaurantSearch(
-                                           restaurant.Name,
-                                           restaurant.Location)"
-                                       target="_blank"
-                                       rel="noopener noreferrer">
-                                        @UiText.Get("OpenRestaurantInAmap")
-                                    </a>
                                 }
+                                <button class="map-link"
+                                        type="button"
+                                        @onclick="() => OpenRestaurantInAmapAsync(restaurant.Name)">
+                                    @UiText.Get("OpenRestaurantInAmap")
+                                </button>
                                 @if (restaurant.Tags.Count > 0)
                                 {
                                     <ul class="tag-list" aria-label="@UiText.Get("TagsLabel")">
@@ -332,6 +330,15 @@
         _editDraft = null;
         _formMessage = null;
         _formHasError = false;
+    }
+
+    private async Task OpenRestaurantInAmapAsync(string name)
+    {
+        await JsRuntime.InvokeVoidAsync(
+            "chishaziAmap.openPoiSearch",
+            AmapUriBuilder.BuildAndroidPoiSearch(name),
+            AmapUriBuilder.BuildIosPoiSearch(name),
+            AmapUriBuilder.BuildRestaurantSearch(name));
     }
 
     private async Task SaveRestaurantEditAsync()

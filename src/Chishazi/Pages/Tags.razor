@@ -99,17 +99,15 @@
                 @foreach (var tag in _tags)
                 {
                     <article class="tag-management-card">
-                        <div class="tag-management-details">
-                            <label class="form-field">
-                                <span>@UiText.Get("TagDisplayNameLabel")</span>
-                                <input @bind="_tagDisplayNames[tag.RowNumber]" />
-                            </label>
-                            <button class="text-button"
-                                    type="button"
-                                    @onclick="() => UpdateTagDisplayNameAsync(tag)">
-                                @UiText.Get("SaveTagDisplayName")
-                            </button>
-                        </div>
+                        <label class="tag-management-field">
+                            <span class="visually-hidden">@UiText.Get("TagDisplayNameLabel")</span>
+                            <input @bind="_tagDisplayNames[tag.RowNumber]" />
+                        </label>
+                        <button class="tag-save-button"
+                                type="button"
+                                @onclick="() => UpdateTagDisplayNameAsync(tag)">
+                            @UiText.Get("SaveTagDisplayName")
+                        </button>
                     </article>
                 }
             </div>

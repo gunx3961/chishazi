@@ -45,8 +45,9 @@ Example row:
 Noodle House,Late-night noodles,"6c0d3d2e27cc4da185a612a1f97be622",Shanghai Xuhui District
 ```
 
-Restaurant locations are plain text. More complete place text produces a more
-precise Amap search. No Amap API key is required for the generated URI links.
+Restaurant locations are plain text for personal notes and local browsing
+search. Map links search by Restaurant name. No Amap API key is required for
+the generated URI links.
 
 The application generates and manages Tag IDs. The Tags route exposes only
 display names. The worksheet and header row do not need to be created manually.
@@ -157,7 +158,8 @@ the Google authorization flow with the configured test account.
 - The Recipe route can add multiple recipes to the local working snapshot in
   one action.
 - The Restaurant route can add and edit multiple restaurants, search location
-  text, and open a best-effort Amap app or web search.
+  text locally, and open a best-effort Amap app or web search by Restaurant
+  name.
 - Local additions from any type route accumulate in the same working snapshot.
 - Pull is blocked while local changes are pending.
 - **Review local changes** compares the working copy with the last synchronized

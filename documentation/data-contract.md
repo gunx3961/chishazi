@@ -1,6 +1,6 @@
 # Spreadsheet Data Contract
 
-Last updated: 2026-06-15
+Last updated: 2026-06-17
 
 ## Source of Truth
 
@@ -60,9 +60,8 @@ Definition property: `SpreadsheetDefinition.Restaurant`
 
 Restaurant and Recipe are equal-level meal choice types and share the same Tag
 catalog. Restaurant locations remain plain text to keep entry minimal. The
-application combines the Restaurant name and location as an encoded Amap URI
-search keyword; the stored worksheet value does not contain a map URL, POI ID,
-or coordinates.
+application searches Amap by Restaurant name; the stored worksheet value does
+not contain a map URL, POI ID, or coordinates.
 
 ### Tag
 

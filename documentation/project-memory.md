@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-06-15
+Last updated: 2026-06-17
 
 This file records durable facts that future implementation sessions must retain.
 It is not a backlog.
@@ -80,8 +80,8 @@ It is not a backlog.
 - Restaurant optional headers: `description`, `tags`, and `location`
 - Recipe and Restaurant `tags` cells use comma-separated references to
   `Tag.id`.
-- Restaurant `location` is free text used with the Restaurant name for Amap
-  URI search.
+- Restaurant `location` is free text used for local browsing search. Amap
+  links search only by Restaurant name.
 - Tag rows contain only `id` and `displayName`.
 - Tag IDs are opaque, automatically generated, hidden from the user, and
   preserved when display names change.
@@ -136,8 +136,9 @@ It is not a backlog.
   needs them.
 - Store Restaurant locations as free text. Do not add coordinates or POI IDs
   until exact-place selection is required.
-- Build Restaurant map links only against the fixed Amap URI search endpoint.
-  Native app launch is best-effort and web fallback is expected.
+- Build Restaurant map links from the Restaurant name only. Use direct Amap
+  application schemes on supported mobile browsers and keep the Amap web URI as
+  fallback. Native app launch remains best-effort.
 - Upload intent is derived only from the working snapshot compared with the
   synchronized baseline.
 - Fresh remote data is used only to detect conflicts on intended upload targets.
