@@ -60,6 +60,11 @@
   <data name="SearchDataPlaceholder" xml:space="preserve"><value>输入想找的内容</value></data>
   <data name="RowsFound" xml:space="preserve"><value>找到 {0} 条</value></data>
   <data name="NoDataMatches" xml:space="preserve"><value>没找到，再换个词试试。</value></data>
+  <data name="RouteNavigationLabel" xml:space="preserve"><value>菜单切换</value></data>
+  <data name="HomeNavItem" xml:space="preserve"><value>🏠 首页</value></data>
+  <data name="RecipeNavItem" xml:space="preserve"><value>🍲 菜谱</value></data>
+  <data name="RestaurantNavItem" xml:space="preserve"><value>🏮 馆子</value></data>
+  <data name="TagNavItem" xml:space="preserve"><value>🏷️ 标签</value></data>
   <data name="SearchRecipes" xml:space="preserve"><value>🔍 搜菜谱</value></data>
   <data name="SearchRecipesPlaceholder" xml:space="preserve"><value>搜菜名、简介或标签</value></data>
   <data name="LocalChangesLabel" xml:space="preserve"><value>📝 先记在这里</value></data>
@@ -127,6 +132,10 @@
   <data name="AddTagsToLocalChanges" xml:space="preserve"><value>📝 先记下这 {0} 个标签</value></data>
   <data name="TagsAddedLocally" xml:space="preserve"><value>✅ 记下 {0} 个新标签了。回首页确认后就能保存。</value></data>
   <data name="LocalTagChangesSaveFailed" xml:space="preserve"><value>标签没记下来，再试一次吧。</value></data>
+  <data name="QuickAddTagPlaceholder" xml:space="preserve"><value>顺手加个标签</value></data>
+  <data name="QuickAddTag" xml:space="preserve"><value>➕ 加标签</value></data>
+  <data name="QuickTagAddedAndSelected" xml:space="preserve"><value>✅ “{0}”加好了，也帮你选上了。</value></data>
+  <data name="ExistingTagSelected" xml:space="preserve"><value>✅ 已经有“{0}”了，帮你选上。</value></data>
   <data name="AllTagDisplayNamesRequired" xml:space="preserve"><value>每个标签都得有个名字。</value></data>
   <data name="TagDisplayNameAlreadyExists" xml:space="preserve"><value>“{0}”已经有了，换一个吧。</value></data>
   <data name="AvailableTagsTitle" xml:space="preserve"><value>🏷️ 现有标签</value></data>

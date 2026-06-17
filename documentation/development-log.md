@@ -204,3 +204,10 @@
 - Changed the Amap web fallback to open in a new window and treat mobile page
   blur as a successful application handoff, preserving the current application
   page after map attempts.
+- Changed the home synchronization module to use stable data tiles with a
+  vertical action stack.
+- Replaced inconsistent data-route return links with a shared route navigation
+  pattern across raw data, Recipe, Restaurant, and Tag pages.
+- Added quick Tag creation shortcuts inside Recipe and Restaurant Tag selectors.
+  New Tags are appended to the local working snapshot and immediately selected
+  for the current draft or edit form.

@@ -95,9 +95,11 @@ It is not a backlog.
   `/data/restaurants`, and `/data/tags`.
 - `/data` provides global raw worksheet browsing and simple text search.
 - `/data/recipes` provides Recipe browsing, search, controlled tag selection,
-  multi-Recipe creation, and local editing of existing Recipes.
+  multi-Recipe creation, quick Tag creation, and local editing of existing
+  Recipes.
 - `/data/restaurants` provides Restaurant browsing, search, controlled tag
-  selection, batch creation, local editing, and Amap search links.
+  selection, quick Tag creation, batch creation, local editing, and Amap search
+  links.
 - `/data/tags` provides Tag creation and display-name editing.
 
 ## Durable Decisions

@@ -12,11 +12,20 @@
             <p class="section-label">@UiText.Get("DataBrowserLabel")</p>
             <h1>@UiText.Get("RecipeListTitle")</h1>
         </div>
-        <div class="route-actions">
-            <a class="text-link" href="data/restaurants">@UiText.Get("ViewRestaurants")</a>
-            <a class="text-link" href="data/tags">@UiText.Get("ManageTags")</a>
-            <a class="text-link" href="">@UiText.Get("ReturnHome")</a>
-        </div>
+        <nav class="route-nav" aria-label="@UiText.Get("RouteNavigationLabel")">
+            <NavLink class="route-nav-link" href="" Match="NavLinkMatch.All">
+                @UiText.Get("HomeNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/recipes" Match="NavLinkMatch.All">
+                @UiText.Get("RecipeNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/restaurants" Match="NavLinkMatch.All">
+                @UiText.Get("RestaurantNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/tags" Match="NavLinkMatch.All">
+                @UiText.Get("TagNavItem")
+            </NavLink>
+        </nav>
     </div>
 
     @if (_snapshot is null)
@@ -93,6 +102,16 @@
                             {
                                 <span class="muted-copy">@UiText.Get("NoTags")</span>
                             }
+                            <div class="quick-tag-add">
+                                <input @bind="draft.QuickTagDisplayName"
+                                       placeholder="@UiText.Get("QuickAddTagPlaceholder")" />
+                                <button class="quick-tag-button"
+                                        type="button"
+                                        disabled="@_isSaving"
+                                        @onclick="() => AddQuickTagAsync(draft)">
+                                    @UiText.Get("QuickAddTag")
+                                </button>
+                            </div>
                         </fieldset>
 
                         @if (_drafts.Count > 1)
@@ -174,6 +193,16 @@
                                         {
                                             <span class="muted-copy">@UiText.Get("NoTags")</span>
                                         }
+                                        <div class="quick-tag-add">
+                                            <input @bind="_editDraft.QuickTagDisplayName"
+                                                   placeholder="@UiText.Get("QuickAddTagPlaceholder")" />
+                                            <button class="quick-tag-button"
+                                                    type="button"
+                                                    disabled="@_isSaving"
+                                                    @onclick="() => AddQuickTagAsync(_editDraft)">
+                                                @UiText.Get("QuickAddTag")
+                                            </button>
+                                        </div>
                                     </fieldset>
 
                                     <div class="recipe-card-actions">
@@ -287,6 +316,81 @@
         else
         {
             draft.Tags.Remove(tag);
+        }
+    }
+
+    private Task AddQuickTagAsync(RecipeDraft draft) =>
+        AddQuickTagAsync(draft.Tags, draft.QuickTagDisplayName, value =>
+        {
+            draft.QuickTagDisplayName = value;
+        });
+
+    private Task AddQuickTagAsync(RecipeEditDraft draft) =>
+        AddQuickTagAsync(draft.Tags, draft.QuickTagDisplayName, value =>
+        {
+            draft.QuickTagDisplayName = value;
+        });
+
+    private async Task AddQuickTagAsync(
+        HashSet<string> targetTags,
+        string displayName,
+        Action<string> setDisplayName)
+    {
+        if (_snapshot is null)
+        {
+            return;
+        }
+
+        displayName = displayName.Trim();
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            _formMessage = UiText.Get("TagDisplayNameRequired");
+            _formHasError = true;
+            return;
+        }
+
+        var existingTag = _tags.FirstOrDefault(tag =>
+            tag.DisplayName.Equals(displayName, StringComparison.OrdinalIgnoreCase));
+        if (existingTag is not null)
+        {
+            targetTags.Add(existingTag.Id);
+            setDisplayName(string.Empty);
+            _formMessage = UiText.Get("ExistingTagSelected", existingTag.DisplayName);
+            _formHasError = false;
+            return;
+        }
+
+        _isSaving = true;
+        _formMessage = null;
+        _formHasError = false;
+
+        try
+        {
+            var tagId = Guid.NewGuid().ToString("N");
+            _snapshot = MutationService.AppendRows(
+                _snapshot,
+                SpreadsheetDefinition.Tag,
+                [
+                    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["id"] = tagId,
+                        ["displayName"] = displayName
+                    }
+                ]);
+            await Store.SetAsync(_snapshot);
+            ParseSnapshot();
+            targetTags.Add(tagId);
+            setDisplayName(string.Empty);
+            _formMessage = UiText.Get("QuickTagAddedAndSelected", displayName);
+        }
+        catch (Exception)
+        {
+            _formMessage = UiText.Get("LocalTagChangesSaveFailed");
+            _formHasError = true;
+        }
+        finally
+        {
+            _isSaving = false;
         }
     }
 
@@ -488,6 +592,7 @@
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string QuickTagDisplayName { get; set; } = string.Empty;
         public HashSet<string> Tags { get; } = new(StringComparer.OrdinalIgnoreCase);
     }
 
@@ -496,6 +601,7 @@
         public int RowNumber { get; init; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string QuickTagDisplayName { get; set; } = string.Empty;
         public HashSet<string> Tags { get; } = new(StringComparer.OrdinalIgnoreCase);
     }
 }

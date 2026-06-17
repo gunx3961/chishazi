@@ -104,25 +104,39 @@ a {
 }
 
 .sync-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+    align-items: stretch;
     margin-top: 4rem;
 }
 
+.data-summary {
+    min-width: 0;
+}
+
 .data-total-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
     margin: 0;
-    padding: 0;
+    padding: 1rem;
+    border: 1px solid rgba(29, 41, 31, 0.14);
     color: #1d291f;
+    background: rgba(255, 253, 248, 0.72);
     font-family: var(--font-ui);
-    font-size: clamp(1.8rem, 3vw, 2.6rem);
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: rgba(172, 91, 42, 0.45);
-    text-decoration-thickness: 0.08em;
-    text-underline-offset: 0.16em;
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    font-weight: 750;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
 }
 
 .data-total-link:hover {
-    text-decoration-color: #ac5b2a;
+    border-color: rgba(172, 91, 42, 0.45);
+    background: rgba(238, 180, 91, 0.14);
+    transform: translateY(-2px);
 }
 
 .data-total-link:focus-visible {
@@ -132,7 +146,8 @@ a {
 
 .data-type-list {
     display: grid;
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 0.8rem;
 }
 
 .status-copy,
@@ -183,6 +198,17 @@ code {
     display: flex;
     flex: 0 0 auto;
     gap: 0.75rem;
+}
+
+.sync-panel .control-actions {
+    flex-direction: column;
+    width: 100%;
+}
+
+.sync-panel .primary-button,
+.sync-panel .secondary-button {
+    width: 100%;
+    min-width: 0;
 }
 
 .secondary-button {
@@ -340,6 +366,51 @@ code {
     font-weight: 700;
 }
 
+.quick-tag-add {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding-top: 0.2rem;
+}
+
+.quick-tag-add input {
+    min-width: 8rem;
+    flex: 1 1 12rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid rgba(29, 41, 31, 0.2);
+    color: #1d291f;
+    background: rgba(255, 253, 248, 0.82);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.quick-tag-add input:focus {
+    border-color: #ac5b2a;
+    outline: 1px solid #ac5b2a;
+}
+
+.quick-tag-button {
+    flex: 0 0 auto;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(172, 91, 42, 0.28);
+    color: #8f471f;
+    background: rgba(238, 180, 91, 0.15);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.quick-tag-button:hover:not(:disabled) {
+    background: rgba(238, 180, 91, 0.27);
+}
+
+.quick-tag-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
 .text-button {
     justify-self: start;
     padding: 0;
@@ -374,6 +445,35 @@ code {
 .route-actions {
     display: flex;
     gap: 1.2rem;
+}
+
+.route-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem;
+}
+
+.route-nav-link {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid rgba(29, 41, 31, 0.14);
+    color: #59645b;
+    background: rgba(255, 253, 248, 0.58);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.route-nav-link:hover {
+    border-color: rgba(172, 91, 42, 0.38);
+    color: #1d291f;
+    background: rgba(238, 180, 91, 0.13);
+}
+
+.route-nav-link.active {
+    border-color: rgba(172, 91, 42, 0.48);
+    color: #7f4120;
+    background: rgba(238, 180, 91, 0.22);
 }
 
 .muted-copy {
@@ -723,6 +823,21 @@ code {
         flex-direction: column;
     }
 
+    .sync-panel {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .data-type-list {
+        grid-template-columns: repeat(auto-fit, minmax(6.8rem, 1fr));
+        gap: 0.55rem;
+    }
+
+    .data-total-link {
+        padding: 0.75rem;
+        font-size: clamp(1.25rem, 6vw, 1.8rem);
+    }
+
     .primary-button {
         width: 100%;
     }
@@ -788,6 +903,19 @@ code {
         margin: 0;
     }
 
+    .quick-tag-add {
+        gap: 0.35rem;
+    }
+
+    .quick-tag-add input {
+        min-width: 0;
+        padding: 0.45rem 0.55rem;
+    }
+
+    .quick-tag-button {
+        padding: 0.45rem 0.55rem;
+    }
+
     .entry-panel .primary-button,
     .entry-panel .secondary-button {
         min-width: 0;
@@ -810,6 +938,15 @@ code {
     .route-actions {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .route-nav {
+        justify-content: flex-start;
+    }
+
+    .route-nav-link {
+        flex: 1 1 7rem;
+        text-align: center;
     }
 
     .tag-management-list {

@@ -11,10 +11,20 @@
             <p class="section-label">@UiText.Get("DataBrowserLabel")</p>
             <h1>@UiText.Get("TagListTitle")</h1>
         </div>
-        <div class="route-actions">
-            <a class="text-link" href="data/recipes">@UiText.Get("ReturnToRecipes")</a>
-            <a class="text-link" href="">@UiText.Get("ReturnHome")</a>
-        </div>
+        <nav class="route-nav" aria-label="@UiText.Get("RouteNavigationLabel")">
+            <NavLink class="route-nav-link" href="" Match="NavLinkMatch.All">
+                @UiText.Get("HomeNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/recipes" Match="NavLinkMatch.All">
+                @UiText.Get("RecipeNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/restaurants" Match="NavLinkMatch.All">
+                @UiText.Get("RestaurantNavItem")
+            </NavLink>
+            <NavLink class="route-nav-link" href="data/tags" Match="NavLinkMatch.All">
+                @UiText.Get("TagNavItem")
+            </NavLink>
+        </nav>
     </div>
 
     @if (_snapshot is null)
